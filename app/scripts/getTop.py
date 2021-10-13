@@ -34,7 +34,6 @@ async def getTopBalances(timestamp_start, period, balance_gt):
     query = gql(queryString)
 
     result = await client.execute_async(query)
-    print(result['t1'][0])
     
     days = {}
 
@@ -43,10 +42,11 @@ async def getTopBalances(timestamp_start, period, balance_gt):
             if (int(day['day']) >= day_start and int(day['day']) <= (day_start+period)):
                 if not (str(day['day']) in days):
                     days[str(day['day'])] = {}
-                    days[str(day['day'])]['timestamp'] = 1609459200 + 86400*period
+                    days[str(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
                     days[str(day['day'])]['balance'] = int(day['ohmBalance']) / 100000000
                     days[str(day['day'])]['holders'] = 1
                 else:
+                    days[str(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
                     temp = days[str(day['day'])]['balance']
                     temp += (int(day['ohmBalance'])/ 100000000)
                     days[str(day['day'])]['balance'] = temp
