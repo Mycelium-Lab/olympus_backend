@@ -22,3 +22,6 @@ async def get_dao_days(start: int = 1617291702, days: int = 1):
 async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1):
     response  = await getFirstWallets(start, days, count)
     return {"data":response}
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000)
