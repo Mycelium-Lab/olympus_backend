@@ -2,12 +2,12 @@ from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 from datetime import datetime
 
-transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets")
+transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/id/QmThQWLEohGNnWzKpozLxdDq5XHpWupyrJixWACbKSVMPM")
 client = Client(transport=transport, fetch_schema_from_transport=True)
 
 async def getTopBalances(timestamp_start, period, balance_gt):
 
-    balance_gt = balance_gt*100000000
+    balance_gt = balance_gt*1000000000
     day_start = datetime.fromtimestamp(timestamp_start).timetuple().tm_yday
     timestamp_end = timestamp_start + 86400*period
 
@@ -43,12 +43,12 @@ async def getTopBalances(timestamp_start, period, balance_gt):
                 if not (str(day['day']) in days):
                     days[str(day['day'])] = {}
                     days[str(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
-                    days[str(day['day'])]['balance'] = int(day['ohmBalance']) / 100000000
+                    days[str(day['day'])]['balance'] = int(day['ohmBalance']) / 1000000000
                     days[str(day['day'])]['holders'] = 1
                 else:
                     days[str(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
                     temp = days[str(day['day'])]['balance']
-                    temp += (int(day['ohmBalance'])/ 100000000)
+                    temp += (int(day['ohmBalance'])/ 1000000000)
                     days[str(day['day'])]['balance'] = temp
                     days[str(day['day'])]['holders'] +=1
 

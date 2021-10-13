@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
 from app.scripts.firstN import getFirstWallets
+from app.scripts.getTotal import totalWallets, totalBalances
 
 app = FastAPI()
 
@@ -16,6 +17,16 @@ async def get_top_days(start: int = 1617291702, days: int = 1, amount: int = 100
 async def get_dao_days(start: int = 1617291702, days: int = 1):
     wallet = "0x245cc372C84B3645Bf0Ffe6538620B04a217988B"
     response  = await getBalances(start, days, wallet)
+    return {"data":response}
+
+@app.get("/api/get_total_wallets/")
+async def get_total_wallets(start: int = 1617291702, days: int = 1):
+    response  = await totalWallets(start, days)
+    return {"data":response}
+
+@app.get("/api/get_total_balances/")
+async def get_total_balances(start: int = 1617291702, days: int = 1):
+    response  = await totalBalances(start, days)
     return {"data":response}
 
 @app.get("/api/get_first_n/")
