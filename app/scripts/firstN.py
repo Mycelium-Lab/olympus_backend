@@ -2,7 +2,7 @@ from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 from datetime import datetime
 
-transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/id/QmThQWLEohGNnWzKpozLxdDq5XHpWupyrJixWACbKSVMPM")
+transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/id/QmbuC5GvyA9eFq8vKBAvEj4ZRjSdbzrW9WgeSqtyMW3dM2")
 client = Client(transport=transport, fetch_schema_from_transport=True)
 
 async def getFirstWallets(timestamp_start, period, cnt=None):

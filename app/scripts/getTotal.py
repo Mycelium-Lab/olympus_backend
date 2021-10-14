@@ -1,7 +1,7 @@
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
-transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/id/QmWKyoR5kTzfEe1PagjFicAfCZCkEVruCoNvw2TAykC79D")
+transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/id/QmbuC5GvyA9eFq8vKBAvEj4ZRjSdbzrW9WgeSqtyMW3dM2")
 client = Client(transport=transport, fetch_schema_from_transport=True)
 
 async def queryTotal(timestamp_start, period):
