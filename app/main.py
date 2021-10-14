@@ -3,8 +3,22 @@ from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
 from app.scripts.firstN import getFirstWallets
 from app.scripts.getTotal import totalWallets, totalBalances
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "https://modest-bartik-cbbabe.netlify.app",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/api/get_top_days/")
