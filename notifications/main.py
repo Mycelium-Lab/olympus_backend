@@ -1,50 +1,30 @@
-import config
-import telebot
 from fastapi import FastAPI
+from aiogram import types, Dispatcher, Bot
+from bot import dp, bot, TOKEN
+
 
 app = FastAPI()
+WEBHOOK_PATH = f"/bot/{TOKEN}"
+WEBHOOK_URL = "https://55db-95-143-218-167.ngrok.io" + WEBHOOK_PATH
 
-WEBHOOK_LISTEN = "0.0.0.0"
-WEBHOOK_PORT = 8443
+
+@app.on_event("startup")
+async def on_startup():
+    webhook_info = await bot.get_webhook_info()
+    if webhook_info.url != WEBHOOK_URL:
+        await bot.set_webhook(
+            url=WEBHOOK_URL
+        )
 
 
-API_TOKEN = config.token
-bot = telebot.TeleBot(API_TOKEN)
+@app.post(WEBHOOK_PATH)
+async def bot_webhook(update: dict):
+    telegram_update = types.Update(**update)
+    Dispatcher.set_current(dp)
+    Bot.set_current(bot)
+    await dp.process_update(telegram_update)
 
-app = web.Application()
 
-# process only requests with correct bot token
-async def handle(request):
-    if request.match_info.get("token") == bot.token:
-        request_body_dict = await request.json()
-        update = telebot.types.Update.de_json(request_body_dict)
-        bot.process_new_updates([update])
-        return web.Response()
-    else:
-        return web.Response(status=403)
-
-app.router.add_post("/{token}/", handle)
-
-help_string = []
-help_string.append("*Some bot* - just a bot.\n\n")
-help_string.append("/start - notifications start\n")
-help_string.append("/help - shows this help")
-
-# - - - messages
-
-@bot.message_handler(commands=["start"])
-def send_welcome(message):
-    bot.send_message(message.chat.id, "Starting notifications")
-
-# - - -
-
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-
-# start aiohttp server (our bot)
-web.run_app(
-    app,
-    host=WEBHOOK_LISTEN,
-    port=WEBHOOK_PORT,
-    ssl_context=context,
-)
+@app.on_event("shutdown")
+async def on_shutdown():
+    await bot.session.close()
