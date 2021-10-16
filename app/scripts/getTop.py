@@ -68,10 +68,21 @@ async def getTopBalances(timestamp_start, period, balance_gt):
                 days[int(day['day'])]['holders'] +=1
 
     days_array = []
-    for i in days:
-        days_array.append(days[i])
+    real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
+    for i in range(0, real_day+period):
+        if i in days:
+            days_array.append(days[i])
+        else:
+            tempDay = {}
+            tempDay['timestamp'] = 1609459200 + 86400*int(i)
+            if i!= 0:
+                tempDay['balance'] = days_array[i-1]['balance']
+            else:
+                tempDay['balance'] = "0"
+            days_array.append(tempDay)
 
-    return days_array
+
+    return days_array[real_day:real_day+period]
 
 timestamp_start = 1617291702
 days = 10

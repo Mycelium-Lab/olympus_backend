@@ -43,10 +43,21 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
                     days[int(day['day'])]['balance'] = temp
 
     days_array = []
-    for i in sorted(days.keys()):
-        days_array.append(days[i])
+    real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
+    for i in range(0, real_day+period):
+        if i in days:
+            days_array.append(days[i])
+        else:
+            tempDay = {}
+            tempDay['timestamp'] = 1609459200 + 86400*int(i)
+            if i!= 0:
+                tempDay['balance'] = days_array[i-1]['balance']
+            else:
+                tempDay['balance'] = "0"
+            days_array.append(tempDay)
 
-    return days_array
+
+    return days_array[real_day:real_day+period]
 
 N = 10
 timestamp_start = 1617291702
