@@ -15,7 +15,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
 
     queryString = "query getTopBalances {"
     for i in range(day_start, day_start+period+2):
-        queryString +=  f"""t{i}:dailyBalances(first:1000,orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", day_gt:{i},day_lt:{i+2}}}) {{
+        queryString +=  f"""t{i}:dailyBalances(first:1000,orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", day_gt:{i},day_lt:{i+2},address_not:"0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a"}}) {{
                 ohmBalance
                 address
                 day
