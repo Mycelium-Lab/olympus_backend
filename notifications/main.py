@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
-from bot import dp, bot, TOKEN
+from bot import dp, bot, TOKEN, unstake, transfer, minter
 
 
 app = FastAPI()
 WEBHOOK_PATH = f"/bot/{TOKEN}"
-WEBHOOK_URL = "https://55db-95-143-218-167.ngrok.io" + WEBHOOK_PATH
+WEBHOOK_URL = "https://84ea-95-143-218-167.ngrok.io" + WEBHOOK_PATH
 
 
 @app.on_event("startup")
@@ -16,6 +16,20 @@ async def on_startup():
             url=WEBHOOK_URL
         )
 
+@app.get("/unstake")
+async def handle_unstake(amount: int = 100, to: str = ""):
+    await unstake(amount,to)
+    return "ok"
+
+@app.get("/transfer")
+async def handle_transfer(amount: int = 100):
+    await transfer(amount)
+    return "ok"
+
+@app.get("/minter")
+async def handle_transfer(address: str):
+    await minter(address)
+    return "ok"
 
 @app.post(WEBHOOK_PATH)
 async def bot_webhook(update: dict):

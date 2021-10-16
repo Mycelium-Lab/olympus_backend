@@ -1,11 +1,11 @@
 import json
 import requests
+import pandas as pd
 import threading
 import time
 
 StartTime=time.time()
 
-AMOUNT_MIN = 1
 INTERVAL_IN_SECONDS = 30
 
 class setInterval :
@@ -26,18 +26,15 @@ class setInterval :
         self.stopEvent.set()
 
 
-def getDaoTransfers(amount, timestamp):
+def getMinterChanges():
     query = """
     {
-      transfers(orderBy:timestamp, orderDirection:desc, where:{timestamp_gte:%d, from:"0x245cc372C84B3645Bf0Ffe6538620B04a217988B"}){
+      minters{
         id
-        from
-        to
-        amount
-        timestamp
+        address
       }
     }
-    """ % (amount, timestamp)
+    """
     request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
     if request.status_code == 200:
         return request.json()
@@ -45,12 +42,13 @@ def getDaoTransfers(amount, timestamp):
         raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
 
 def action():
-    timestamp = time.time() - INTERVAL_IN_SECONDS - 20
-    dao_data = getDaoTransfers(AMOUNT_MIN, timestamp)
-    dao_data = dao_data['data']['transfers']
-    if dao_data:
-        print(dao_data[0]['amount'])
-        requests.get(f"https://84ea-95-143-218-167.ngrok.io/transder?amount={dao_data[0]['amount']}")
+    transfers_data = getMinterChanges()
+    transfers_data = transfers_data['data']['minters']
+    
+    if transfers_data:
+        print(unstakes_data[0]['address'])
+        requests.get(f"https://84ea-95-143-218-167.ngrok.io/minter?address={unstakes_data[0]['address']}")
+
 
 
 if __name__== "__main__":

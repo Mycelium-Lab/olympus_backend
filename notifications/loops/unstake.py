@@ -2,10 +2,11 @@ import json
 import requests
 import threading
 import time
+import requests
 
 StartTime=time.time()
 
-AMOUNT_MIN = 1
+AMOUNT_MIN = 0.001
 INTERVAL_IN_SECONDS = 6
 
 class setInterval :
@@ -49,6 +50,7 @@ def action():
     unstakes_data = unstakes_data['data']['unstakes']
     if unstakes_data:
         print(unstakes_data[0]['amount'])
+        requests.get(f"https://84ea-95-143-218-167.ngrok.io/unstake?amount={unstakes_data[0]['amount']}&to={unstakes_data[0]['transaction']['to']}")
 
 if __name__== "__main__":
     action()

@@ -4,6 +4,8 @@ from app.scripts.getBalance import getBalances
 from app.scripts.firstN import getFirstWallets
 from app.scripts.getTotal import totalWallets, totalBalances
 from fastapi.middleware.cors import CORSMiddleware
+from app.scripts.transfer import getTransfer
+from app.scripts.transfer_to import getTransferTo
 
 app = FastAPI()
 
@@ -26,6 +28,19 @@ async def get_top_days(start: int = 1617291702, days: int = 1, amount: int = 100
 
     response  = await getTopBalances(start, days, amount)
     return {"data":response}
+
+@app.get("/api/get_transfer_from/")
+async def get_transfer_from(start: int = 1617291702, days: int = 1):
+
+    response  = await getTransfer(start, days)
+    return {"data":response}
+
+@app.get("/api/get_transfer_to/")
+async def get_transfer_to(start: int = 1617291702, days: int = 1):
+
+    response  = await getTransferTo(start, days)
+    return {"data":response}
+
 
 @app.get("/api/get_dao_days/")
 async def get_dao_days(start: int = 1617291702, days: int = 1):
