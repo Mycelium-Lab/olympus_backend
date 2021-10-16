@@ -14,7 +14,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
     ts_array = []
 
     queryString = "query getTopBalances {"
-    for i in range(day_start, day_start+period):
+    for i in range(day_start, day_start+period+2):
         queryString +=  f"""t{i}:dailyBalances(first:1000,orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", day_gt:{i},day_lt:{i+2}}}) {{
                 ohmBalance
                 address
@@ -43,7 +43,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
 
     days_array = []
     real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
-    for i in range(0, real_day+period):
+    for i in range(0, real_day+period+2):
         if i in days:
             days_array.append(days[i])
         else:
@@ -56,7 +56,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
             days_array.append(tempDay)
 
 
-    return days_array[real_day-1:real_day+period]
+    return days_array[real_day-1:real_day+period+2]
 
 timestamp_start = 1617291702
 days = 10
