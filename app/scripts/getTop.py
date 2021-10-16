@@ -1,6 +1,7 @@
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 from datetime import datetime
+import requests
 
 transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets")
 client = Client(transport=transport, fetch_schema_from_transport=True)
@@ -8,53 +9,26 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 async def getTopBalances(timestamp_start, period, balance_gt):
 
     balance_gt = balance_gt*1000000000
-    day_start = datetime.fromtimestamp(timestamp_start).timetuple().tm_yday
+    day_start = datetime.fromtimestamp(timestamp_start).timetuple().tm_yday - 3
     timestamp_end = timestamp_start + 86400*period
-    print(timestamp_end)
+    ts_array = []
 
-    queryString = f"""query getTopBalances {{
-        t1:dailyBalances(first:1000,orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", timestamp_gt: "{timestamp_start}", timestamp_lt: "{timestamp_end}"}}) {{
-            ohmBalance
-            address
-            day
-        }}
-        t2:dailyBalances(first:1000, skip: 1000, orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", timestamp_gt: "{timestamp_start}", timestamp_lt: "{timestamp_end}"}}) {{
-            ohmBalance
-            address
-            day
-        }}
-        t3:dailyBalances(first:1000, skip: 2000, orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", timestamp_gt: "{timestamp_start}", timestamp_lt: "{timestamp_end}"}}) {{
-            ohmBalance
-            address
-            day
-        }}
-        t4:dailyBalances(first:1000, skip: 3000, orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", timestamp_gt: "{timestamp_start}", timestamp_lt: "{timestamp_end}"}}) {{
-            ohmBalance
-            address
-            day
-        }}
-        t5:dailyBalances(first:1000, skip: 4000, orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", timestamp_gt: "{timestamp_start}", timestamp_lt: "{timestamp_end}"}}) {{
-            ohmBalance
-            address
-            day
-        }}
-        t6:dailyBalances(first:1000, skip: 5000, orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", timestamp_gt: "{timestamp_start}", timestamp_lt: "{timestamp_end}"}}) {{
-            ohmBalance
-            address
-            day
-        }}
-    }}
-    """
-    # balance before listing
+    queryString = "query getTopBalances {"
+    for i in range(day_start, day_start+period):
+        queryString +=  f"""t{i}:dailyBalances(first:1000,orderBy: timestamp, where: {{ohmBalance_gt: "{balance_gt}", day_gt:{i},day_lt:{i+2}}}) {{
+                ohmBalance
+                address
+                day
+            }}"""
+    queryString += '}'
     
-    query = gql(queryString)
-
-    result = await client.execute_async(query)
+    request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': queryString})
+    result = request.json()
     
     days = {}
 
-    for res in result:
-        for day in result[res]:
+    for res in result['data']:
+        for day in result['data'][str(res)]:
             if not (int(day['day']) in days):
                 days[int(day['day'])] = {}
                 days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
@@ -82,7 +56,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
             days_array.append(tempDay)
 
 
-    return days_array[real_day:real_day+period]
+    return days_array[real_day-1:real_day+period]
 
 timestamp_start = 1617291702
 days = 10

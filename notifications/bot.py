@@ -30,7 +30,7 @@ async def unstake(amount,to):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟥 BIG UNSTAKING {amount} OHM to {to}")
+        await bot.send_message(i, f"🟨 Warning {amount} OHM to {to}")
     return "ok"
 
 async def transfer(amount):
