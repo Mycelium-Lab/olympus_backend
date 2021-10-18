@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
 from bot import dp, bot, TOKEN, unstake, transfer, minter
+from pydantic import BaseModel
+
+class Item(BaseModel):
+    amount: int
 
 
 app = FastAPI()
@@ -30,6 +34,21 @@ async def handle_transfer(amount: int = 100):
 async def handle_transfer(address: str):
     await minter(address)
     return "ok"
+
+@app.post("/change_unstake")
+async def handle_change_unstake(item: Item):
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    fake_db["unstake"] = item.amount
+
+    f = open("notifications.txt",'w')
+    f.write(str(fake_db))
+    f.close()
+
+    return "ok"
+
 
 @app.post(WEBHOOK_PATH)
 async def bot_webhook(update: dict):
