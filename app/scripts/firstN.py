@@ -11,7 +11,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
     timestamp_end = timestamp_start + 86400*period
 
     queryString = f"""query balancesByWallet {{
-        wallets(first:1000,orderBy: birth, first: {cnt}) {{
+        wallets(orderBy: birth, first: {cnt}) {{
             id
             dailyBalance(orderBy: timestamp, first: 1000) {{
                 ohmBalance
