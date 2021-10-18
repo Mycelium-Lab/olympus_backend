@@ -77,7 +77,7 @@ async def handle_change_unstake(item: Item):
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
     f.close()
-    change_unstake(item.amount)
+    await change_unstake(item.amount)
 
     return {"data":fake_db}
 
@@ -93,7 +93,7 @@ async def handle_change_dao(item: Item):
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
     f.close()
-    change_dao(item.amount)
+    await change_dao(item.amount)
 
     return {"data":fake_db}
 
@@ -110,7 +110,7 @@ async def handle_change_transfer(item: Item):
     f.write(str(fake_db))
     f.close()
 
-    change_transfer(item.amount)
+    await change_transfer(item.amount)
 
     return {"data":fake_db}
 
