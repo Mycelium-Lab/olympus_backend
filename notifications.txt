@@ -1,1 +1,1 @@
-{'unstake': 10, 'transfer': 10}
+{'unstake': 10, 'transfer': 10, 'dao_transfer':1}

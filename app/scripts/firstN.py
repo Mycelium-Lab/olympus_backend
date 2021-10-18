@@ -59,13 +59,6 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
 
     return days_array[real_day:real_day+period]
 
-N = 10
-timestamp_start = 1617291702
-days = 15
-#wallet = "0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"
-res = getFirstWallets(timestamp_start, days, N)
-
-print(res)
 
 
 

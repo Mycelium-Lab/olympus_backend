@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
-from notifications.bot import dp, bot, TOKEN, unstake, transfer, minter
+from notifications.bot import dp, bot, TOKEN, unstake, transfer, minter, change_unstake, change_dao, change_transfer
 from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
@@ -77,11 +77,28 @@ async def handle_change_unstake(item: Item):
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
     f.close()
+    change_unstake(item.amount)
 
     return {"data":fake_db}
 
-@app.post("/api/change_transfer")
-async def handle_change_unstake(item: Item):
+@app.post("/api/change_dao_transfer")
+async def handle_change_dao(item: Item):
+
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    fake_db["dao_transfer"] = item.amount
+
+    f = open("notifications.txt",'w')
+    f.write(str(fake_db))
+    f.close()
+    change_dao(item.amount)
+
+    return {"data":fake_db}
+
+@app.post("/api/change_large_transfer")
+async def handle_change_transfer(item: Item):
 
     f = open("notifications.txt")
     fake_db = eval(f.read())
@@ -91,6 +108,16 @@ async def handle_change_unstake(item: Item):
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
+    f.close()
+
+    change_transfer(item.amount)
+
+    return {"data":fake_db}
+
+@app.get("/api/notifications_states")
+async def states():
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
     f.close()
 
     return {"data":fake_db}

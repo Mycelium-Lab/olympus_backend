@@ -33,6 +33,38 @@ async def unstake(amount,to):
         await bot.send_message(i, f"🟨 Warning {amount} OHM to {to}")
     return "ok"
 
+async def change_unstake(amount):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"Notifications set to Unstakes larger than {amount}")
+    return "ok"
+
+async def change_transfer(amount):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"Notifications set to Transfers larger than {amount}")
+    return "ok"
+
+async def change_dao(amount):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"Notifications set to DAO Transfers larger than {amount}")
+    return "ok"
+
+async def unstake(amount,to):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"🟨 Warning {amount} OHM to {to}")
+    return "ok"
+
 async def transfer(amount):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())
