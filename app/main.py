@@ -68,7 +68,7 @@ async def bot_webhook(update: dict):
 async def on_shutdown():
     await bot.session.close()
 
-@app.post("/change_unstake")
+@app.post("/api/change_unstake")
 async def handle_change_unstake(item: Item):
 
     f = open("notifications.txt")
@@ -83,7 +83,7 @@ async def handle_change_unstake(item: Item):
 
     return {"data":fake_db}
 
-@app.post("/change_transfer")
+@app.post("/api/change_transfer")
 async def handle_change_unstake(item: Item):
 
     f = open("notifications.txt")
