@@ -16,11 +16,7 @@ class Item(BaseModel):
 
 app = FastAPI()
 
-origins = [
-    "https://modest-bartik-cbbabe.netlify.app",
-    "http://localhost:3000",
-    "https://40817cae91c3b5ebd8f625a3a4a6aebf.netlify.app"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
