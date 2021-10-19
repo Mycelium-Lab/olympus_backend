@@ -41,17 +41,32 @@ async def on_startup():
 
 @app.get("/unstake")
 async def handle_unstake(amount: float = 100.0, to: str = "",id: str =""):
-    await unstake(amount,to,id)
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    if float(fake_db['unstake']) <= amount:
+        await unstake(amount,to,id)
     return "ok"
 
 @app.get("/transfer")
 async def handle_transfer(amount: float = 100.0, to: str = "", tx: str = "", froms: str = ""):
-    await transfer(amount,froms,to,tx)
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    if float(fake_db['transfer']) <= amount:
+        await transfer(amount,froms,to,tx)
     return "ok"
 
 @app.get("/transfer_dao")
 async def handle_transfer_dao(amount: float = 100.0, to: str = "", tx: str = "",froms: str = ""):
-    await transfer_dao(amount,froms, to,tx)
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    if float(fake_db['dao_transfer']) <= amount:
+        await transfer_dao(amount,froms, to,tx)
     return "ok"
 
 @app.get("/minter")
