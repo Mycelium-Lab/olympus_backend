@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
-from notifications.bot import dp, bot, TOKEN, unstake, transfer, minter, change_unstake, change_dao, change_transfer
+from notifications.bot import dp, bot, TOKEN, unstake, transfer, minter, change_unstake, change_dao, change_transfer, transfer_dao
 from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
@@ -46,12 +46,12 @@ async def handle_unstake(amount: float = 100.0, to: str = "",id: str =""):
 
 @app.get("/transfer")
 async def handle_transfer(amount: float = 100.0, to: str = "", id: str = "", froms: str = ""):
-    await transfer(amount)
+    await transfer(amount,froms,to,id)
     return "ok"
 
 @app.get("/transfer_dao")
-async def handle_transfer_dao(amount: float = 100.0):
-    await transfer(amount)
+async def handle_transfer_dao(amount: float = 100.0, to: str = "", id: str = "",froms: str = ""):
+    await transfer_dao(amount,froms, to,id)
     return "ok"
 
 @app.get("/minter")
