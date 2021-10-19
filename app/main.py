@@ -45,13 +45,13 @@ async def handle_unstake(amount: float = 100.0, to: str = "",id: str =""):
     return "ok"
 
 @app.get("/transfer")
-async def handle_transfer(amount: float = 100.0, to: str = "", id: str = "", froms: str = ""):
-    await transfer(amount,froms,to,id)
+async def handle_transfer(amount: float = 100.0, to: str = "", tx: str = "", froms: str = ""):
+    await transfer(amount,froms,to,tx)
     return "ok"
 
 @app.get("/transfer_dao")
-async def handle_transfer_dao(amount: float = 100.0, to: str = "", id: str = "",froms: str = ""):
-    await transfer_dao(amount,froms, to,id)
+async def handle_transfer_dao(amount: float = 100.0, to: str = "", tx: str = "",froms: str = ""):
+    await transfer_dao(amount,froms, to,tx)
     return "ok"
 
 @app.get("/minter")

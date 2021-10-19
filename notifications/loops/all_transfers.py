@@ -6,7 +6,7 @@ import time
 StartTime=time.time()
 
 AMOUNT_MIN = 1
-INTERVAL_IN_SECONDS = 30
+INTERVAL_IN_SECONDS = 20
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -51,7 +51,7 @@ def action():
     if dao_data:
         print(dao_data[0]['amount'])
         for i in dao_data:
-            requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={i['amount']}&to={i['to']}&froms={i['from']}&id{i['id']}")
+            requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={i['amount']}&to={i['to']}&froms={i['from']}&tx={i['id']}")
 
 
 if __name__== "__main__":
