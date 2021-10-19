@@ -29,7 +29,7 @@ class setInterval :
 def getDaoTransfers(amount, timestamp):
     query = """
     {
-      transfers(orderBy:timestamp, orderDirection:desc, where:{timestamp_gte:%d, from:"0x245cc372C84B3645Bf0Ffe6538620B04a217988B"}){
+      transfers(orderBy:timestamp, orderDirection:desc, where:{timestamp_gte:%d, from:"0x245cc372C84B3645Bf0Ffe6538620B04a217988B", amount_gte:%d}){
         id
         from
         to
@@ -37,7 +37,7 @@ def getDaoTransfers(amount, timestamp):
         timestamp
       }
     }
-    """ % (amount, timestamp)
+    """ % (timestamp, amount)
     request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
     if request.status_code == 200:
         return request.json()
