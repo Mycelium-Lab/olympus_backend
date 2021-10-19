@@ -40,12 +40,12 @@ async def on_startup():
         )
 
 @app.get("/unstake")
-async def handle_unstake(amount: float = 100, to: str = ""):
+async def handle_unstake(amount: float = 100.0, to: str = ""):
     await unstake(amount,to)
     return "ok"
 
 @app.get("/transfer")
-async def handle_transfer(amount: float = 100):
+async def handle_transfer(amount: float = 100.0):
     await transfer(amount)
     return "ok"
 
