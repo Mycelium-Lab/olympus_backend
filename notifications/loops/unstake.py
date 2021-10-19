@@ -7,7 +7,7 @@ import requests
 StartTime=time.time()
 
 AMOUNT_MIN = 1
-INTERVAL_IN_SECONDS = 30
+INTERVAL_IN_SECONDS = 40
 
 class setInterval :
     def __init__(self,interval,action) :
