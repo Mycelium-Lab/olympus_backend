@@ -38,16 +38,28 @@ def getTransfers(amount, timestamp):
       }
     }
     """ % (amount, timestamp)
-    request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
-    if request.status_code == 200:
+    try:
+        request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
+        request.raise_for_status()
         return request.json()
-    else:
+    except requests.exceptions.RequestException as err:
+        print ("OOps: Something Else",err)
+        return {'data':{'transfers':[]}}
+    except requests.exceptions.HTTPError as errh:
+        print ("Http Error:",errh)
+        return {'data':{'transfers':[]}}
+    except requests.exceptions.ConnectionError as errc:
+        print ("Error Connecting:",errc)
+        return {'data':{'transfers':[]}}
+    except requests.exceptions.Timeout as errt:
+        print ("Timeout Error:",errt) 
         return {'data':{'transfers':[]}}
 
 def action():
     timestamp = time.time() - INTERVAL_IN_SECONDS - 20
     dao_data = getTransfers(AMOUNT_MIN, timestamp)
     dao_data = dao_data['data']['transfers']
+    print(timestamp)
     if dao_data:
         print(dao_data[0]['amount'])
         for i in dao_data:
