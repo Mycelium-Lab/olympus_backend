@@ -6,7 +6,7 @@ import time
 StartTime=time.time()
 
 AMOUNT_MIN = 1
-INTERVAL_IN_SECONDS = 30
+INTERVAL_IN_SECONDS = 3
 
 class setInterval :
     def __init__(self,interval,action) :

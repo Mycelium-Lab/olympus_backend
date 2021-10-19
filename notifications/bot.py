@@ -62,7 +62,7 @@ async def transfer(amount,froms,to,tx):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟥 Danger: Big transfer {amount} OHM from {froms} to {to} \nTransaction: https://etherscan.io/tx/{tx}")
+        await bot.send_message(i, f"🟦 Info: Big transfer {amount} OHM from {froms} to {to} \nTransaction: https://etherscan.io/tx/{tx}")
     return "ok"
 
 async def transfer_dao(amount,froms,to,tx):
@@ -78,5 +78,5 @@ async def minter(address):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟥 MINTER CHANGED to  {address}")
+        await bot.send_message(i, f"🟥 MINTER CHANGED to {address}")
     return "ok"

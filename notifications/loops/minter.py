@@ -7,6 +7,7 @@ import time
 StartTime=time.time()
 
 INTERVAL_IN_SECONDS = 30
+last_minter = ""
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -39,15 +40,16 @@ def getMinterChanges():
     if request.status_code == 200:
         return request.json()
     else:
-        raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
+        raise {'data':{'minters':[]}}
 
 def action():
     transfers_data = getMinterChanges()
     transfers_data = transfers_data['data']['minters']
     
-    if transfers_data:
-        print(unstakes_data[0]['address'])
-        requests.get(f"https://977c-62-84-119-83.ngrok.io/minter?address={unstakes_data[0]['address']}")
+    if transfers_data[0]['address'] != last_minter:
+        print(transfers_data[0]['address'])
+        last_minter = transfers_data[0]['address']
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/minter?address={transfers_data[0]['address']}")
 
 
 
