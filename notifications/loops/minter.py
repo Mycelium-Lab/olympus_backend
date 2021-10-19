@@ -47,7 +47,7 @@ def action():
     
     if transfers_data:
         print(unstakes_data[0]['address'])
-        requests.get(f"https://84ea-95-143-218-167.ngrok.io/minter?address={unstakes_data[0]['address']}")
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/minter?address={unstakes_data[0]['address']}")
 
 
 

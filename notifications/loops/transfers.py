@@ -50,7 +50,7 @@ def action():
     dao_data = dao_data['data']['transfers']
     if dao_data:
         print(dao_data[0]['amount'])
-        requests.get(f"https://84ea-95-143-218-167.ngrok.io/transder?amount={dao_data[0]['amount']}")
+        requests.get(f"https://84ea-95-143-218-167.ngrok.io/transfer?amount={dao_data[0]['amount']}")
 
 
 if __name__== "__main__":

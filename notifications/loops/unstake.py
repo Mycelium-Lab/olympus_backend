@@ -50,7 +50,7 @@ def action():
     unstakes_data = unstakes_data['data']['unstakes']
     if unstakes_data:
         print(unstakes_data[0]['amount'])
-        requests.get(f"https://84ea-95-143-218-167.ngrok.io/unstake?amount={unstakes_data[0]['amount']}&to={unstakes_data[0]['transaction']['to']}")
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={unstakes_data[0]['amount']}&to={unstakes_data[0]['transaction']['to']}")
 
 if __name__== "__main__":
     action()
