@@ -54,15 +54,23 @@ async def unstake(amount,to,tx):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟨 Warning: Big unstake {amount} OHM to {to} \nEtherscan: https://etherscan.io/tx/{tx}")
+        await bot.send_message(i, f"🟨 Warning: Big unstake {amount} OHM to {to}")
     return "ok"
 
-async def transfer(amount):
+async def transfer(amount,froms,to,tx):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟥 BIG TRANSFER {amount} OHM")
+        await bot.send_message(i, f"🟥 Danger: Big transfer {amount} OHM from {froms} to {to} \nTransaction: https://etherscan.io/tx/{tx}")
+    return "ok"
+
+async def transfer_dao(amount,froms,to,tx):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"🟥 Danger: Big transfer {amount} OHM from DAO to {to} \nTransaction: https://etherscan.io/tx/{tx}")
     return "ok"
 
 async def minter(address):
