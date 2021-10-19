@@ -6,8 +6,8 @@ import requests
 
 StartTime=time.time()
 
-AMOUNT_MIN = 0.001
-INTERVAL_IN_SECONDS = 6
+AMOUNT_MIN = 1
+INTERVAL_IN_SECONDS = 30
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -48,6 +48,7 @@ def action():
     timestamp = time.time() - INTERVAL_IN_SECONDS - 20
     unstakes_data = getUnstakes(AMOUNT_MIN, timestamp)
     unstakes_data = unstakes_data['data']['unstakes']
+    print(timestamp)
     if unstakes_data:
         print(unstakes_data[0]['amount'])
         requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={unstakes_data[0]['amount']}&to={unstakes_data[0]['transaction']['to']}")
