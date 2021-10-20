@@ -54,7 +54,7 @@ async def unstake(amount,to,tx):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟨 Warning: Big unstake {amount} OHM to {to} \n\nWallet: https://ethplorer.io/ru/address/{to}")
+        await bot.send_message(i, f'🟨 Warning: Big unstake {amount} OHM to <a href="https://ethplorer.io/ru/address/{to}">{to}</a>', parse_mode="HTML")
     return "ok"
 
 async def transfer(amount,froms,to,tx):
@@ -62,7 +62,7 @@ async def transfer(amount,froms,to,tx):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟦 Info: Big transfer {amount} OHM from {froms} to {to} \n\nTransaction: https://ethplorer.io/ru/tx/{tx}")
+        await bot.send_message(i, f'🟦 Info: Big transfer {amount} OHM from <a href="https://ethplorer.io/ru/address/{froms}">{froms}</a> to <a href="https://ethplorer.io/ru/address/{to}">{to}</a> \n\nTransaction: https://ethplorer.io/ru/tx/{tx}', parse_mode="HTML")
     return "ok"
 
 async def transfer_dao(amount,froms,to,tx):
@@ -70,7 +70,7 @@ async def transfer_dao(amount,froms,to,tx):
     db = eval(file_db.read())
     file_db.close()
     for i in db:
-        await bot.send_message(i, f"🟥 Danger: Big transfer {amount} OHM from DAO to {to} \n\nTransaction: https://ethplorer.io/ru/tx/{tx}")
+        await bot.send_message(i, f'🟥 Danger: Big transfer {amount} OHM from DAO to <a href="https://ethplorer.io/ru/address/{to}">{to}</a> \n\nTransaction: https://ethplorer.io/ru/tx/{tx}', parse_mode="HTML")
     return "ok"
 
 async def minter(address):
