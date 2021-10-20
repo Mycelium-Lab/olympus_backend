@@ -37,7 +37,7 @@ def getTransfers(amount, timestamp):
         timestamp
       }""" % (amount, timestamp)
 
-     query += """t2:transfers(orderBy:timestamp, orderDirection:desc, where:{timestamp_gte:%d, from:"0x245cc372C84B3645Bf0Ffe6538620B04a217988B", amount_gte:%d}){
+    query += """t2:transfers(orderBy:timestamp, orderDirection:desc, where:{timestamp_gte:%d, from:"0x245cc372C84B3645Bf0Ffe6538620B04a217988B", amount_gte:%d}){
         id
         from
         to
