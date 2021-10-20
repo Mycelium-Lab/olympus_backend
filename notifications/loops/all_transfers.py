@@ -6,7 +6,7 @@ import time
 StartTime=time.time()
 
 AMOUNT_MIN = 1
-INTERVAL_IN_SECONDS = 50
+INTERVAL_IN_SECONDS = 40
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -29,22 +29,22 @@ class setInterval :
 def getTransfers(amount, timestamp):
     query = """
     {
-      transfers(orderBy:timestamp, orderDirection:desc, where:{amount_gte: %d, timestamp_gte:%d}){
+      t1:transfers(orderBy:timestamp, orderDirection:desc, where:{amount_gte: %d, timestamp_gte:%d}){
         id
         from
         to
         amount
         timestamp
       }
-    """ % (amount, timestamp)
-    query += """unstakes(orderBy:timestamp orderDirection: desc, where:{amount_gte:%d, timestamp_gte:%d}){
-          id
-          amount
-          timestamp
-          transaction{from to blockHash}
-        }
+      t2:transfers(orderBy:timestamp, orderDirection:desc, where:{timestamp_gte:%d, from:"0x245cc372C84B3645Bf0Ffe6538620B04a217988B", amount_gte:%d}){
+        id
+        from
+        to
+        amount
+        timestamp
+      }
     }
-    """ % (timestamp, amount)
+    """ % (amount, timestamp)
     try:
         request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
         request.raise_for_status()
@@ -65,18 +65,18 @@ def getTransfers(amount, timestamp):
 def action():
     timestamp = time.time() - INTERVAL_IN_SECONDS - 20
     dao_data = getTransfers(AMOUNT_MIN, timestamp)
-    unstakes_data = dao_data['data']['unstakes']
-    transfers_data = dao_data['data']['transfers']
+    transfers_data = dao_data['data']['t1']
+    dao_data = dao_data['data']['t2']
 
     print(timestamp)
     if transfers_data:
         print(transfers_data[0]['amount'])
-        for i in transfer_data:
+        for i in transfers_data:
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={i['amount']}&to={i['to']}&froms={i['from']}&tx={i['id']}")
-    if unstakes_data:
-        print(unstakes_data[0]['amount'])
-        for unst in unstakes_data:
-            requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={unst['amount']}&to={unst['transaction']['from']}&id={unst['transaction']['blockHash']}")
+    if dao_data:
+        print(dao_data[0]['amount'])
+        for i in dao_data:
+            requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={i['amount']}&to={i['to']}&froms={i['from']}&tx={i['id']}")
 
 
 if __name__== "__main__":
