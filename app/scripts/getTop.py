@@ -43,7 +43,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
 
     days_array = []
     real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
-    for i in range(0, real_day+period+2):
+    for i in range(0, real_day+period):
         if i in days:
             days_array.append(days[i])
         else:
@@ -56,7 +56,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
             days_array.append(tempDay)
 
 
-    return days_array[real_day-1:real_day+period+2]
+    return days_array[real_day-1:real_day+period]
 
 timestamp_start = 1617291702
 days = 10
