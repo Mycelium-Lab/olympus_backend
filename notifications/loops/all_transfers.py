@@ -6,7 +6,7 @@ import time
 StartTime=time.time()
 
 AMOUNT_MIN = 1
-INTERVAL_IN_SECONDS = 40
+INTERVAL_IN_SECONDS = 50
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -36,8 +36,15 @@ def getTransfers(amount, timestamp):
         amount
         timestamp
       }
-    }
     """ % (amount, timestamp)
+    query += """unstakes(orderBy:timestamp orderDirection: desc, where:{amount_gte:%d, timestamp_gte:%d}){
+          id
+          amount
+          timestamp
+          transaction{from to blockHash}
+        }
+    }
+    """ % (timestamp, amount)
     try:
         request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
         request.raise_for_status()
@@ -58,12 +65,18 @@ def getTransfers(amount, timestamp):
 def action():
     timestamp = time.time() - INTERVAL_IN_SECONDS - 20
     dao_data = getTransfers(AMOUNT_MIN, timestamp)
-    dao_data = dao_data['data']['transfers']
+    unstakes_data = dao_data['data']['unstakes']
+    transfers_data = dao_data['data']['transfers']
+
     print(timestamp)
-    if dao_data:
-        print(dao_data[0]['amount'])
-        for i in dao_data:
+    if transfers_data:
+        print(transfers_data[0]['amount'])
+        for i in transfer_data:
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={i['amount']}&to={i['to']}&froms={i['from']}&tx={i['id']}")
+    if unstakes_data:
+        print(unstakes_data[0]['amount'])
+        for unst in unstakes_data:
+            requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={unst['amount']}&to={unst['transaction']['from']}&id={unst['transaction']['blockHash']}")
 
 
 if __name__== "__main__":
