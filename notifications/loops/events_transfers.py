@@ -12,7 +12,7 @@ def handle_event(event):
         print(amount)
         if (i['from'] == "0x245cc372C84B3645Bf0Ffe6538620B04a217988B"):
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer_dao?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
-        elif (i['from'] == "0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a"):
+        elif (i['from'] == "0xfd31c7d00ca47653c6ce64af53c1571f9c36566a"):
             requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={amount}&to={i['to']}&id={tx}")
         else:
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
