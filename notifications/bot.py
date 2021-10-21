@@ -76,6 +76,14 @@ async def activate_role(role,address,activated):
         await bot.send_message(i, f'🟨 {act} : {role} for <a href="https://ethplorer.io/ru/address/{address}">{address}</a>', parse_mode="HTML")
     return "ok"
 
+async def reserves(amount,token):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f'🟨 Reserves managed: {amount} {token}', parse_mode="HTML")
+    return "ok"
+
 async def transfer(amount,froms,to,tx):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())

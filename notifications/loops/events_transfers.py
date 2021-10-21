@@ -4,6 +4,19 @@ import time
 import requests
 import asyncio
 
+def getTokenName(token):
+    if token == "0x6B175474E89094C44Da98b954EedeAC495271d0F".lower() or token == "0x6B175474E89094C44Da98b954EedeAC495271d0F":
+        return "DAI"
+    elif token == "0x853d955aCEf822Db058eb8505911ED77F175b99e".lower() or token == "0x853d955aCEf822Db058eb8505911ED77F175b99e":
+        return "FRAX"
+    elif token == "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2".lower() or token == "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2":
+        return "wETH"
+    elif token == "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0".lower() or token == "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0":
+        return "LUSD"
+    else:
+        return str(token)
+
+
 def handle_event(event):
     if event['event'] == "Transfer":
         i = event['args']
@@ -84,6 +97,8 @@ def handle_event(event):
         requests.get(f"https://977c-62-84-119-83.ngrok.io/activate_role?role={role}&address={event['args']['activated'].hex()}&activated={str(event['args']['result'])}")
     elif event['event']=="ReservesManaged":
         print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
+        token = getTokenName(event['args']['token'])
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/activate_role?amount={event['args']['amount']*(10**-18)}&token={token}")
     else:
         print(event)
 
