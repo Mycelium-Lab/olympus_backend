@@ -98,7 +98,7 @@ def handle_event(event):
     elif event['event']=="ReservesManaged":
         print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
         token = getTokenName(event['args']['token'])
-        requests.get(f"https://977c-62-84-119-83.ngrok.io/activate_role?amount={event['args']['amount']*(10**-18)}&token={token}")
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/reserves_managed?amount={event['args']['amount']*(10**-18)}&token={token}")
     else:
         print(event)
 
