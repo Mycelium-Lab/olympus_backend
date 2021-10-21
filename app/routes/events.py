@@ -31,7 +31,13 @@ async def handle_change(role: str = "", address: str = ""):
 
 @router.get("/reserves_managed")
 async def handle_reserves(token: str = "", amount: float = ""):
-    await reserves(amount,token)
+	f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+    index = f"reserves_{token.lower()}"
+    if loat(fake_db[index]) <= amount:
+    	await reserves(amount,token)
+
     return "ok"
 
 @router.get("/activate_role")
