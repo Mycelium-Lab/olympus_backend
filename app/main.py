@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
-from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change_transfer, transfer_dao
+from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change_transfer, transfer_dao, change_reserves
 from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
@@ -14,6 +14,12 @@ from app.routes import events
 
 class Item(BaseModel):
     amount: int = 1
+
+class Amounts(BaseModel):
+    amount_dai: int = 1
+    amount_frax: int = 1
+    amount_weth: int = 1
+    amount_lusd: int = 1
 
 app = FastAPI()
 
@@ -67,6 +73,25 @@ async def handle_change_unstake(item: Item):
     f.write(str(fake_db))
     f.close()
     await change_unstake(item.amount)
+
+    return {"data":fake_db}
+
+@app.post("/api/change_reserves")
+async def handle_change_unstake(item: Amounts):
+
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    fake_db["reseves_dai"] = item.amount_dai
+    fake_db["reserves_frax"] = item.amount_frax
+    fake_db["reserves_lusd"] = item.amount_lusd
+    fake_db["reserves_weth"] = item.amount_weth
+
+    f = open("notifications.txt",'w')
+    f.write(str(fake_db))
+    f.close()
+    await change_reserves(item.amount_dai, item.amount_frax, item.amount_lusd, item.amount_weth)
 
     return {"data":fake_db}
 
@@ -126,7 +151,7 @@ async def get_transfer_from(start: int = 1617291702, days: int = 1):
 
 @app.get("/api/get_transfer_to/")
 async def get_transfer_to(start: int = 1617291702, days: int = 1):
-    
+
     response  = await getTransferTo(start, days)
     return {"data":response}
 

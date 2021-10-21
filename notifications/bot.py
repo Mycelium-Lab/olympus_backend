@@ -57,6 +57,14 @@ async def unstake(amount,to,tx):
         await bot.send_message(i, f'🟨 Warning: Big unstake {amount} OHM to <a href="https://ethplorer.io/ru/address/{to}">{to}</a> \n\nTransaction: <a href="https://ethplorer.io/ru/tx/{tx}">{tx}</a>', parse_mode="HTML")
     return "ok"
 
+async def change_reserves(dai, frax, lusd, weth):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f'Notifications set to Reserves managed:\nDAI: {dai}\nFRAX: {frax}\nLUSD: {lusd}\nWETH: {weth}', parse_mode="HTML")
+    return "ok"
+
 async def change_role(role,address):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())

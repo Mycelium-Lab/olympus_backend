@@ -1,1 +1,9 @@
-{'unstake': 10, 'transfer': 10, 'dao_transfer':1}
+{
+	'unstake': 10,
+	'transfer': 10,
+	'dao_transfer':1,
+	'reserves_dai':1,
+	'reserves_frax':1,
+	'reserves_weth':1,
+	'resves_lusd':1
+}
