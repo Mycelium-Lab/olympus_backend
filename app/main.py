@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.scripts.transfer import getTransfer
 from app.scripts.transfer_to import getTransferTo
 from pydantic import BaseModel
-from routes import events
+from app.routes import events
 
 class Item(BaseModel):
     amount: int = 1
