@@ -18,7 +18,7 @@ class setInterval :
 
     def __setInterval(self) :
         nextTime=time.time()+self.interval
-        while not self.stopEvent.wait(nextTime-time.time()) :
+        while not self.stopEvent.wait(nextTime-time.time()):
             nextTime+=self.interval
             self.action()
 

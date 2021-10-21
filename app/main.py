@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.scripts.transfer import getTransfer
 from app.scripts.transfer_to import getTransferTo
 from pydantic import BaseModel
+from routes import events
 
 class Item(BaseModel):
     amount: int = 1
@@ -30,6 +31,8 @@ app.add_middleware(
 WEBHOOK_PATH = f"/bot/{TOKEN}"
 WEBHOOK_URL = "https://977c-62-84-119-83.ngrok.io" + WEBHOOK_PATH
 
+app.include_router(events.router)
+
 
 @app.on_event("startup")
 async def on_startup():
@@ -39,40 +42,6 @@ async def on_startup():
             url=WEBHOOK_URL
         )
 
-@app.get("/unstake")
-async def handle_unstake(amount: float = 100.0, to: str = "",id: str =""):
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    if float(fake_db['unstake']) <= amount:
-        await unstake(amount,to,id)
-    return "ok"
-
-@app.get("/transfer")
-async def handle_transfer(amount: float = 100.0, to: str = "", tx: str = "", froms: str = ""):
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    if float(fake_db['transfer']) <= amount:
-        await transfer(amount,froms,to,tx)
-    return "ok"
-
-@app.get("/transfer_dao")
-async def handle_transfer_dao(amount: float = 100.0, to: str = "", tx: str = "",froms: str = ""):
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    if float(fake_db['dao_transfer']) <= amount:
-        await transfer_dao(amount,froms, to,tx)
-    return "ok"
-
-@app.get("/minter")
-async def handle_transfer(address: str):
-    await minter(address)
-    return "ok"
 
 @app.post(WEBHOOK_PATH)
 async def bot_webhook(update: dict):
