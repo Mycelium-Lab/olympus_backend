@@ -41,6 +41,14 @@ async def change_transfer(amount):
         await bot.send_message(i, f"Notifications set to Transfers larger than {amount}")
     return "ok"
 
+async def change_mint(amount):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"Notifications set to Mints larger than {amount}")
+    return "ok"
+
 async def change_dao(amount):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())
@@ -55,6 +63,14 @@ async def unstake(amount,to,tx):
     file_db.close()
     for i in db:
         await bot.send_message(i, f'🟨 Warning: Big unstake {amount} OHM to <a href="https://ethplorer.io/ru/address/{to}">{to}</a> \n\nTransaction: <a href="https://ethplorer.io/ru/tx/{tx}">{tx}</a>', parse_mode="HTML")
+    return "ok"
+
+async def mint(amount,to,tx):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f'🟨 Warning: Big minting {amount} OHM to <a href="https://ethplorer.io/ru/address/{to}">{to}</a> \n\nTransaction: <a href="https://ethplorer.io/ru/tx/{tx}">{tx}</a>', parse_mode="HTML")
     return "ok"
 
 async def change_reserves(dai, frax, lusd, weth):

@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter
-from notifications.bot import unstake, transfer, minter, transfer_dao, change_role, activate_role, reserves
+from notifications.bot import unstake, transfer, minter, transfer_dao, change_role, activate_role, reserves, mint
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -53,6 +53,16 @@ async def handle_transfer_dao(amount: float = 100.0, to: str = "", tx: str = "",
 
     if float(fake_db['dao_transfer']) <= amount:
         await transfer_dao(amount,froms, to,tx)
+    return "ok"
+
+@router.get("/mint")
+async def handle_mint(amount: float = 100.0, to: str = "", tx: str = ""):
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
+    if float(fake_db['mint']) <= amount:
+        await mint(amount, to,tx)
     return "ok"
 
 @router.get("/minter")
