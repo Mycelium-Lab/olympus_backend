@@ -35,6 +35,11 @@ async def getTopBalances(timestamp_start, period, balance_gt):
                     days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
                     days[int(day['day'])]['balance'] = int(day['ohmBalance']) / 1000000000
                     days[int(day['day'])]['holders'] = 1
+                else:
+                    days[int(day['day'])] = {}
+                    days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
+                    days[int(day['day'])]['balance'] = 0
+                    days[int(day['day'])]['holders'] = 0
             else:
                 if int(day['ohmBalance']) >= balance_gt:
                     days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
