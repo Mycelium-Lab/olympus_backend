@@ -6,8 +6,8 @@ import time
 
 StartTime=time.time()
 
-INTERVAL_IN_SECONDS = 30
-last_minter = ""
+INTERVAL_IN_SECONDS = 60
+last_minter = "0x31f8cc382c9898b273eff4e0b7626a6987c846e8"
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -30,7 +30,7 @@ class setInterval :
 def getMinterChanges():
     query = """
     {
-      minters{
+      minters {
         id
         address
       }
@@ -46,7 +46,7 @@ def action():
     transfers_data = getMinterChanges()
     transfers_data = transfers_data['data']['minters']
     
-    if transfers_data[0]['address'] != last_minter:
+    if transfers_data[2]['address'] != last_minter:
         print(transfers_data[0]['address'])
         last_minter = transfers_data[0]['address']
         requests.get(f"https://977c-62-84-119-83.ngrok.io/minter?address={transfers_data[0]['address']}")

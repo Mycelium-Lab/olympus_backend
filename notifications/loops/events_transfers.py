@@ -17,49 +17,72 @@ def handle_event(event):
         else:
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
     elif event['event']=="ChangeQueued":
+        role = ""
         if event['args']['managing']==0:
+            role = "RESERVEDEPOSITOR"
             print("RESERVEDEPOSITOR "+event['args']['queued'])
         elif event['args']['managing']==1:
+            role = "RESERVESPENDER"
             print("RESERVESPENDER "+event['args']['queued'])
         elif event['args']['managing']==2:
+            role = "RESERVETOKEN"
             print("RESERVETOKEN "+event['args']['queued'])
         elif event['args']['managing']==3:
+            role = "RESERVEMANAGER"
             print("RESERVEMANAGER "+event['args']['queued'])
         elif event['args']['managing']==4:
+            role = "LIQUIDITYDEPOSITOR"
             print("LIQUIDITYDEPOSITOR "+event['args']['queued'])
         elif event['args']['managing']==5:
+            role = "LIQUIDITYTOKEN"
             print("LIQUIDITYTOKEN "+event['args']['queued'])
         elif event['args']['managing']==6:
+            role = "LIQUIDITYMANAGER"
             print("LIQUIDITYMANAGER "+event['args']['queued'])
         elif event['args']['managing']==7:
+            role = "DEBTOR"
             print("DEBTOR "+event['args']['queued'])
         elif event['args']['managing']==8:
+            role = "REWARDMANAGER"
             print("REWARDMANAGER "+event['args']['queued'])
         elif event['args']['managing']==9:
+            role = "SOHM"
             print("SOHM "+event['args']['queued'])
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/change_role?role={role}&address={event['args']['queued'].hex()}")
     elif event['event']=="ChangeActivated":
         if event['args']['managing']==0:
+            role = "RESERVEDEPOSITOR"
             print("RESERVEDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==1:
+            role = "RESERVESPENDER"
             print("RESERVESPENDER "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==2:
+            role = "RESERVETOKEN"
             print("RESERVETOKEN "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==3:
+            role = "RESERVEMANAGER"
             print("RESERVEMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==4:
+            role = "LIQUIDITYDEPOSITOR"
             print("LIQUIDITYDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==5:
+            role = "LIQUIDITYTOKEN"
             print("LIQUIDITYTOKEN "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==6:
+            role = "LIQUIDITYMANAGER"
             print("LIQUIDITYMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==7:
+            role = "DEBTOR"
             print("DEBTOR "+event['args']['activated'])
         elif event['args']['managing']==8:
+            role = "REWARDMANAGER"
             print("REWARDMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
         elif event['args']['managing']==9:
+            role = "SOHM"
             print("SOHM "+event['args']['activated']+" "+str(event['args']['result']))
+        requests.get(f"https://977c-62-84-119-83.ngrok.io/activate_role?role={role}&address={event['args']['activated'].hex()}&activated={str(event['args']['result'])}")
     elif event['event']=="ReservesManaged":
-        print("ReservesManaged "+str(event['args']['amount']*(10**-9))+" "+(event['args']['token']))
+        print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
     else:
         print(event)
 

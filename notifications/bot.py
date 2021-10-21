@@ -57,6 +57,25 @@ async def unstake(amount,to,tx):
         await bot.send_message(i, f'🟨 Warning: Big unstake {amount} OHM to <a href="https://ethplorer.io/ru/address/{to}">{to}</a> \n\nTransaction: <a href="https://ethplorer.io/ru/tx/{tx}">{tx}</a>', parse_mode="HTML")
     return "ok"
 
+async def change_role(role,address):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f'🟨 Role in queue: {role} for <a href="https://ethplorer.io/ru/address/{address}">{address}</a>', parse_mode="HTML")
+    return "ok"
+
+async def activate_role(role,address,activated):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    act = "Role has been activated"
+    if activated != "true":
+        act = "Role hasn`t been activated:" 
+    for i in db:
+        await bot.send_message(i, f'🟨 {act} : {role} for <a href="https://ethplorer.io/ru/address/{address}">{address}</a>', parse_mode="HTML")
+    return "ok"
+
 async def transfer(amount,froms,to,tx):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())

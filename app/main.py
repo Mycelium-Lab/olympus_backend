@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from aiogram import types, Dispatcher, Bot
-from notifications.bot import dp, bot, TOKEN, unstake, transfer, minter, change_unstake, change_dao, change_transfer, transfer_dao
+from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change_transfer, transfer_dao
 from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
@@ -126,7 +126,7 @@ async def get_transfer_from(start: int = 1617291702, days: int = 1):
 
 @app.get("/api/get_transfer_to/")
 async def get_transfer_to(start: int = 1617291702, days: int = 1):
-
+    
     response  = await getTransferTo(start, days)
     return {"data":response}
 
