@@ -50,6 +50,7 @@ def handle_event(event):
             print("SOHM "+event['args']['queued'])
         requests.get(f"https://977c-62-84-119-83.ngrok.io/change_role?role={role}&address={event['args']['queued'].hex()}")
     elif event['event']=="ChangeActivated":
+        role = ""
         if event['args']['managing']==0:
             role = "RESERVEDEPOSITOR"
             print("RESERVEDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
