@@ -17,9 +17,9 @@ class Item(BaseModel):
 
 class Amounts(BaseModel):
     amount_dai: int = 1
-    amount_frax: int = 1
-    amount_weth: int = 1
-    amount_lusd: int = 1
+    #amount_frax: int = 1
+    #amount_weth: int = 1
+    #amount_lusd: int = 1
 
 app = FastAPI()
 
@@ -100,14 +100,15 @@ async def handle_change_unstake(item: Amounts):
     f.close()
 
     fake_db["reseves_dai"] = item.amount_dai
-    fake_db["reserves_frax"] = item.amount_frax
-    fake_db["reserves_lusd"] = item.amount_lusd
-    fake_db["reserves_weth"] = item.amount_weth
+    #fake_db["reserves_frax"] = item.amount_frax
+    #fake_db["reserves_lusd"] = item.amount_lusd
+    #fake_db["reserves_weth"] = item.amount_weth
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
     f.close()
-    await change_reserves(item.amount_dai, item.amount_frax, item.amount_lusd, item.amount_weth)
+    #await change_reserves(item.amount_dai, item.amount_frax, item.amount_lusd, item.amount_weth)
+    await change_reserves(item.amount_dai)
 
     return {"data":fake_db}
 
