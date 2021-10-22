@@ -8,14 +8,14 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 
 async def getTopBalances(timestamp_start, period, balance_gt):
 
-    balance_gt = balance_gt*1000000000
+    balance_gte = int(balance_gt)*1000000000
     day_start = datetime.fromtimestamp(timestamp_start).timetuple().tm_yday - 3
     timestamp_end = timestamp_start + 86400*period
     ts_array = []
 
     queryString = "query getTopBalances {"
-    for i in range(day_start, day_start+period+2):
-        queryString +=  f"""t{i}:dailyBalances(first:1000,orderBy: timestamp, where: {{day_gt:{i},day_lt:{i+2},address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f","0x245cc372c84b3645bf0ffe6538620b04a217988b"]}}) {{
+    for i in range(day_start, day_start+period):
+        queryString +=  f"""t{i}:dailyBalances(first:1000,orderBy: timestamp, where: {{balance_gt:{balance_gte/10},day_gt:{i},day_lt:{i+2},address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f","0x245cc372c84b3645bf0ffe6538620b04a217988b"]}}) {{
                 ohmBalance
                 address
                 day
@@ -30,7 +30,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
     for res in result['data']:
         for day in result['data'][str(res)]:
             if not (int(day['day']) in days):
-                if int(day['ohmBalance']) >= balance_gt:
+                if int(day['ohmBalance']) >= balance_gte:
                     days[int(day['day'])] = {}
                     days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
                     days[int(day['day'])]['balance'] = int(day['ohmBalance']) / 1000000000
@@ -41,7 +41,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
                     days[int(day['day'])]['balance'] = 0
                     days[int(day['day'])]['holders'] = 0
             else:
-                if int(day['ohmBalance']) >= balance_gt:
+                if int(day['ohmBalance']) >= balance_gte:
                     days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
                     temp = days[int(day['day'])]['balance']
                     temp += (int(day['ohmBalance'])/ 1000000000)
