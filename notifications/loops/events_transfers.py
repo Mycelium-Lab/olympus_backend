@@ -113,7 +113,7 @@ def log_loop(event_filter, poll_interval):
         time.sleep(poll_interval)
 
 def main():
-    w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/f050447a7af0410cad5d685137851dba'))
+    w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/f7b4f0c651b84c2e93b45e1a398f4f6b'))
     abi = open("ohm.json").read()
     abi_tres = open("treasury.json").read()
     address = '0x383518188c0c6d7730d91b2c03a03c837814a899'
