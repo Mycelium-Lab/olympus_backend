@@ -122,3 +122,30 @@ async def states():
     f.close()
 
     return {"data":fake_db}
+
+'''
+'change_queued':{
+		'RESERVEDEPOSITOR':1,
+		'RESERVESPENDER':1,
+		'RESERVETOKEN':1,
+		'RESERVEMANAGER':1,
+		'LIQUIDITYDEPOSITOR':1,
+		'LIQUIDITYTOKEN':1,
+		'LIQUIDITYMANAGER':1,
+		'DEBTOR':1,
+		'REWARDMANAGER':1,
+		'SOHM':1
+	}
+	'change_activated':{
+		'RESERVEDEPOSITOR':1,
+		'RESERVESPENDER':1,
+		'RESERVETOKEN':1,
+		'RESERVEMANAGER':1,
+		'LIQUIDITYDEPOSITOR':1,
+		'LIQUIDITYTOKEN':1,
+		'LIQUIDITYMANAGER':1,
+		'DEBTOR':1,
+		'REWARDMANAGER':1,
+		'SOHM':1
+	}
+'''
