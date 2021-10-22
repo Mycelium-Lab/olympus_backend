@@ -27,7 +27,7 @@ def handle_event(event):
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer_dao?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
         elif (i['from'] == "0xfd31c7d00ca47653c6ce64af53c1571f9c36566a") or (i['from'] == "0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a"):
             requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={amount}&to={i['to']}&id={tx}")
-        elif i['from'] == "0x383518188c0c6d7730d91b2c03a03c837814a899".lower():
+        elif i['from'] == "0x383518188c0c6d7730d91b2c03a03c837814a899":
             requests.get(f"https://977c-62-84-119-83.ngrok.io/mint?amount={amount}&to={i['to']}&tx={tx}")
         else:
             requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
