@@ -136,7 +136,7 @@ def main():
         item.start()
    
     while True:
-        time.sleep(60)
+        time.sleep(20)
 
 
 if __name__ == '__main__':
