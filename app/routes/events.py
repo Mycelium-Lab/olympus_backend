@@ -34,8 +34,7 @@ async def handle_reserves(token: str = "", amount: float = ""):
     f = open("notifications.txt")
     fake_db = eval(f.read())
     f.close()
-    #index = f"reserves_{token.lower()}"
-    index = f"reserves_dai"
+    index = f"reserves_{token.lower()}"
     if loat(fake_db[index]) <= amount:
         await reserves(amount,token)
 
