@@ -11,15 +11,8 @@ from app.scripts.transfer import getTransfer
 from app.scripts.transfer_to import getTransferTo
 from pydantic import BaseModel
 from app.routes import events
+from app.routes import notifications
 
-class Item(BaseModel):
-    amount: int = 1
-
-class Amounts(BaseModel):
-    amount_dai: int = 1
-    amount_frax: int = 1
-    amount_weth: int = 1
-    amount_lusd: int = 1
 
 app = FastAPI()
 
@@ -38,6 +31,7 @@ WEBHOOK_PATH = f"/bot/{TOKEN}"
 WEBHOOK_URL = "https://977c-62-84-119-83.ngrok.io" + WEBHOOK_PATH
 
 app.include_router(events.router)
+app.include_router(notifications.router)
 
 
 @app.on_event("startup")
@@ -60,97 +54,6 @@ async def bot_webhook(update: dict):
 async def on_shutdown():
     await bot.session.close()
 
-@app.post("/api/change_unstake")
-async def handle_change_unstake(item: Item):
-
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    fake_db["unstake"] = item.amount
-
-    f = open("notifications.txt",'w')
-    f.write(str(fake_db))
-    f.close()
-    await change_unstake(item.amount)
-
-    return {"data":fake_db}
-
-@app.post("/api/change_mint")
-async def handle_change_mint(item: Item):
-
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    fake_db["mint"] = item.amount
-
-    f = open("notifications.txt",'w')
-    f.write(str(fake_db))
-    f.close()
-    await change_mint(item.amount)
-
-    return {"data":fake_db}
-
-@app.post("/api/change_reserves")
-async def handle_change_unstake(item: Amounts):
-
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    fake_db["reserves_dai"] = item.amount_dai
-    fake_db["reserves_frax"] = item.amount_frax
-    fake_db["reserves_lusd"] = item.amount_lusd
-    fake_db["reserves_weth"] = item.amount_weth
-
-    f = open("notifications.txt",'w')
-    f.write(str(fake_db))
-    f.close()
-    await change_reserves(item.amount_dai, item.amount_frax, item.amount_lusd, item.amount_weth)
-
-    return {"data":fake_db}
-
-@app.post("/api/change_dao_transfer")
-async def handle_change_dao(item: Item):
-
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    fake_db["dao_transfer"] = item.amount
-
-    f = open("notifications.txt",'w')
-    f.write(str(fake_db))
-    f.close()
-    await change_dao(item.amount)
-
-    return {"data":fake_db}
-
-@app.post("/api/change_large_transfer")
-async def handle_change_transfer(item: Item):
-
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    fake_db["transfer"] = item.amount
-
-    f = open("notifications.txt",'w')
-    f.write(str(fake_db))
-    f.close()
-
-    await change_transfer(item.amount)
-
-    return {"data":fake_db}
-
-@app.get("/api/notifications_states")
-async def states():
-    f = open("notifications.txt")
-    fake_db = eval(f.read())
-    f.close()
-
-    return {"data":fake_db}
 
 
 @app.get("/api/get_top_days/")
