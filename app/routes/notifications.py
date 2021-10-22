@@ -8,10 +8,23 @@ class Item(BaseModel):
     amount: int = 1
 
 class Amounts(BaseModel):
-    amount_dai: int = 1
-    amount_frax: int = 1
-    amount_weth: int = 1
-    amount_lusd: int = 1
+    amount_dai: int = -1
+    amount_frax: int = -1
+    amount_weth: int = -1
+    amount_lusd: int = -1
+
+class Roles(BaseModel):
+	RESERVEDEPOSITOR:int = 2,
+	RESERVESPENDER:int = 2,
+	RESERVETOKEN:int = 2,
+	RESERVEMANAGER:int = 2,
+	LIQUIDITYDEPOSITOR:int = 2,
+	LIQUIDITYTOKEN:int = 1,
+	LIQUIDITYMANAGER:int = 1,
+	DEBTOR:int = 1,
+	REWARDMANAGER:int = 1,
+	SOHM:int = 1
+
 
 @router.post("/api/change_unstake")
 async def handle_change_unstake(item: Item):
@@ -52,10 +65,14 @@ async def handle_change_unstake(item: Amounts):
     fake_db = eval(f.read())
     f.close()
 
-    fake_db["reserves_dai"] = item.amount_dai
-    fake_db["reserves_frax"] = item.amount_frax
-    fake_db["reserves_lusd"] = item.amount_lusd
-    fake_db["reserves_weth"] = item.amount_weth
+    if item.amount_dai != -1:
+    	fake_db["reserves_dai"] = item.amount_dai
+    if item.amount_frax != -1:
+    	fake_db["reserves_frax"] = item.amount_frax
+    if item.amount_lusd != -1:
+    	fake_db["reserves_lusd"] = item.amount_lusd
+    if item.amount_weth != -1:
+    	fake_db["reserves_weth"] = item.amount_weth
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
