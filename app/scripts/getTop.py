@@ -24,7 +24,7 @@ async def getTopBalances(timestamp_start, period, balance_gt):
     
     request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': queryString})
     result = request.json()
-    print(result)
+    #print(result)
     
     days = {}
 
