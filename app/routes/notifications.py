@@ -157,7 +157,7 @@ async def states(item: States):
         await change_state("reserves changes", item.treasury_balance)
     if item.change_role != 2:
         fake_db['states']["change_role"] = item.change_role
-        await change_state("roles in queue", item.change_role)
+        await change_state("roles changes", item.change_role)
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
