@@ -6,6 +6,30 @@
 	'reserves_frax':1,
 	'reserves_weth':1,
 	'reserves_lusd':1,
-	'mint':1
+	'mint':1,
+	'change_queued':{
+		'RESERVEDEPOSITOR':1,
+		'RESERVESPENDER':1,
+		'RESERVETOKEN':1,
+		'RESERVEMANAGER':1,
+		'LIQUIDITYDEPOSITOR':1,
+		'LIQUIDITYTOKEN':1,
+		'LIQUIDITYMANAGER':1,
+		'DEBTOR':1,
+		'REWARDMANAGER':1,
+		'SOHM':1
+	}
+	'change_activated':{
+		'RESERVEDEPOSITOR':1,
+		'RESERVESPENDER':1,
+		'RESERVETOKEN':1,
+		'RESERVEMANAGER':1,
+		'LIQUIDITYDEPOSITOR':1,
+		'LIQUIDITYTOKEN':1,
+		'LIQUIDITYMANAGER':1,
+		'DEBTOR':1,
+		'REWARDMANAGER':1,
+		'SOHM':1
+	}
 	
 }
