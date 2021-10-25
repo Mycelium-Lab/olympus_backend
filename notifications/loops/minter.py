@@ -7,7 +7,6 @@ import time
 StartTime=time.time()
 
 INTERVAL_IN_SECONDS = 60
-last_minter = "0x31f8cc382c9898b273eff4e0b7626a6987c846e8"
 
 class setInterval :
     def __init__(self,interval,action) :
@@ -27,29 +26,40 @@ class setInterval :
         self.stopEvent.set()
 
 
-def getMinterChanges():
+def getMinterChanges(timestamp):
     query = """
     {
-      minters {
+      minters(where:{timestamp_gt: %d}) {
         id
         address
       }
     }
-    """
-    request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
-    if request.status_code == 200:
+    """ % (timestamp)
+    try:
+        request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': query})
+        request.raise_for_status()
         return request.json()
-    else:
-        raise {'data':{'minters':[]}}
+    except requests.exceptions.RequestException as err:
+        print ("OOps: Something Else",err)
+        return {'data':{'transfers':[]}}
+    except requests.exceptions.HTTPError as errh:
+        print ("Http Error:",errh)
+        return {'data':{'transfers':[]}}
+    except requests.exceptions.ConnectionError as errc:
+        print ("Error Connecting:",errc)
+        return {'data':{'transfers':[]}}
+    except requests.exceptions.Timeout as errt:
+        print ("Timeout Error:",errt) 
+        return {'data':{'transfers':[]}}
 
 def action():
     transfers_data = getMinterChanges()
     transfers_data = transfers_data['data']['minters']
     
-    if transfers_data[2]['address'] != last_minter:
+    if transfers_data:
         print(transfers_data[0]['address'])
-        last_minter = transfers_data[0]['address']
-        requests.get(f"https://977c-62-84-119-83.ngrok.io/minter?address={transfers_data[0]['address']}")
+        for i in transfers_data:
+            requests.get(f"https://977c-62-84-119-83.ngrok.io/minter?address={i['address']}")
 
 
 
