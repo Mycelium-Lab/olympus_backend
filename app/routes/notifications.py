@@ -145,11 +145,11 @@ async def states(item: States):
         fake_db["unstakes"] = item.unstake
         change_state("unstake", item.unstake)
     if item.dao_transfer != 2:
-        fake_db["dao transfers"] = item.dao_transfer
-        change_state("dao_transfer", item.dao_transfer)
+        fake_db["dao_transfer"] = item.dao_transfer
+        change_state("dao transfers", item.dao_transfer)
     if item.transfer != 2:
-        fake_db["all transfers"] = item.transfer
-        change_state("transfer", item.transfer)
+        fake_db["transfer"] = item.transfer
+        change_state("all transfers", item.transfer)
     if item.minting != 2:
         fake_db["minting"] = item.minting
         change_state("mintings", item.minting)
