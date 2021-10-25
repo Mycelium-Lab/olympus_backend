@@ -160,7 +160,7 @@ async def states(item: States):
         fake_db['states']["treasury_balance"] = item.treasury_balance
         await change_state("reserves changes", item.treasury_balance)
     if item.change_role != 2:
-        fake_db['states']["change_role"] = item.changed_role
+        fake_db['states']["change_role"] = item.change_role
         await change_state("roles in queue", item.change_role)
     if item.activate_role != 2:
         fake_db['states']["activate_role"] = item.activate_role
