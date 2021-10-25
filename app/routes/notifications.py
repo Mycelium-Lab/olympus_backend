@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter
 from pydantic import BaseModel
-from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change_transfer, transfer_dao, change_reserves, change_mint
+from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change_transfer, transfer_dao, change_reserves, change_mint, change_state
 
 router = APIRouter()
 
