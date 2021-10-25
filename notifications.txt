@@ -18,7 +18,7 @@
 		'DEBTOR':1,
 		'REWARDMANAGER':1,
 		'SOHM':1
-	}
+	},
 	'change_activated':{
 		'RESERVEDEPOSITOR':1,
 		'RESERVESPENDER':1,
