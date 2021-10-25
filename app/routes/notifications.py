@@ -33,7 +33,6 @@ class States(BaseModel):
     minter_role: int = 2
     treasury_balance: int = 2
     change_role: int = 2
-    activate_role: int = 2
 
 
 @router.post("/api/change_unstake")
@@ -107,8 +106,6 @@ async def handle_change_dao(item: Item):
 
     return {"data":fake_db}
 
-
-
 @router.post("/api/change_large_transfer")
 async def handle_change_transfer(item: Item):
 
@@ -125,7 +122,6 @@ async def handle_change_transfer(item: Item):
     await change_transfer(item.amount)
 
     return {"data":fake_db}
-
 
 @router.get("/api/notifications_states")
 async def states():
@@ -162,9 +158,6 @@ async def states(item: States):
     if item.change_role != 2:
         fake_db['states']["change_role"] = item.change_role
         await change_state("roles in queue", item.change_role)
-    if item.activate_role != 2:
-        fake_db['states']["activate_role"] = item.activate_role
-        await change_state("roles activations", item.activate_role)
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))

@@ -39,7 +39,6 @@
 	    'minter_role': 1,
 	    'treasury_balance': 1,
 	    'change_role': 1,
-	    'activate_role': 1
 	}
 
 }

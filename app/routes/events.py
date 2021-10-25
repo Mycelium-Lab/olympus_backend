@@ -44,7 +44,7 @@ async def handle_reserves(token: str = "", amount: float = ""):
 
 @router.get("/activate_role")
 async def handle_activate(role: str = "", address: str = "", activated: str = ""):
-    if int(fake_db['states']['activate_role']):
+    if int(fake_db['states']['change_role']):
         await activate_role(role,address,activated)
     return "ok"
 
