@@ -54,5 +54,23 @@ async def bot_webhook(update: dict):
 async def on_shutdown():
     await bot.session.close()
 
+@app.get("/api/get_top_days/")
+async def get_top_days(start: int = 1617291702, days: int = 1, amount: int = 10000):
+
+    response  = await getTopBalances(start, days, amount)
+    return {"data":response}
+
+@app.get("/api/get_transfer_from/")
+async def get_transfer_from(start: int = 1617291702, days: int = 1):
+
+    response  = await getTransfer(start, days)
+    return {"data":response}
+
+@app.get("/api/get_transfer_to/")
+async def get_transfer_to(start: int = 1617291702, days: int = 1):
+
+    response  = await getTransferTo(start, days)
+    return {"data":response}
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080)
