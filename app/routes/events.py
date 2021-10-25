@@ -10,7 +10,7 @@ async def handle_unstake(amount: float = 100.0, to: str = "",id: str =""):
     fake_db = eval(f.read())
     f.close()
 
-    if float(fake_db['unstake']) <= amount:
+    if float(fake_db['unstake']) <= amount and int(fake_db['states']['unstake']):
         await unstake(amount,to,id)
     return "ok"
 
@@ -20,13 +20,15 @@ async def handle_transfer(amount: float = 100.0, to: str = "", tx: str = "", fro
     fake_db = eval(f.read())
     f.close()
 
-    if float(fake_db['transfer']) <= amount:
+    if float(fake_db['transfer']) <= amount and int(fake_db['states']['transfer']):
         await transfer(amount,froms,to,tx)
     return "ok"
 
 @router.get("/change_role")
 async def handle_change(role: str = "", address: str = ""):
-    await change_role(role,address)
+
+    if int(fake_db['states']['change_role']):
+        await change_role(role,address)
     return "ok"
 
 @router.get("/reserves_managed")
@@ -35,14 +37,15 @@ async def handle_reserves(token: str = "", amount: float = ""):
     fake_db = eval(f.read())
     f.close()
     index = f"reserves_{token.lower()}"
-    if loat(fake_db[index]) <= amount:
+    if loat(fake_db[index]) <= amount and int(fake_db['states']['treasury_balance']):
         await reserves(amount,token)
 
     return "ok"
 
 @router.get("/activate_role")
 async def handle_activate(role: str = "", address: str = "", activated: str = ""):
-    await activate_role(role,address,activated)
+    if int(fake_db['states']['activate_role']):
+        await activate_role(role,address,activated)
     return "ok"
 
 @router.get("/transfer_dao")
@@ -50,8 +53,8 @@ async def handle_transfer_dao(amount: float = 100.0, to: str = "", tx: str = "",
     f = open("notifications.txt")
     fake_db = eval(f.read())
     f.close()
-
-    if float(fake_db['dao_transfer']) <= amount:
+    
+    if float(fake_db['dao_transfer']) <= amount and int(fake_db['states']['dao_transfer']):
         await transfer_dao(amount,froms, to,tx)
     return "ok"
 
@@ -61,13 +64,14 @@ async def handle_mint(amount: float = 100.0, to: str = "", tx: str = ""):
     fake_db = eval(f.read())
     f.close()
 
-    if float(fake_db['mint']) <= amount:
+    if float(fake_db['mint']) <= amount and int(fake_db['states']['minting']):
         await mint(amount, to,tx)
     return "ok"
 
 @router.get("/minter")
 async def handle_transfer(address: str):
-    await minter(address)
+    if int(fake_db['states']['minter_role']):
+        await minter(address)
     return "ok"
 
 

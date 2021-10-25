@@ -25,6 +25,14 @@ async def stop(message: types.Message):
     file_db.write(str(db))
     await message.answer(f"Notifications stopped")
 
+async def change_queued(item):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    for i in db:
+        await bot.send_message(i, f"Notifications set to Change role: ")
+    return "ok"
+
 async def change_unstake(amount):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())
@@ -131,3 +139,15 @@ async def minter(address):
     for i in db:
         await bot.send_message(i, f"🟥 MINTER CHANGED to {address}")
     return "ok"
+
+async def chage_state(notif, flag):
+    file_db = open('./notifications/fake_db.py')
+    db = eval(file_db.read())
+    file_db.close()
+    state = "disabled"
+    if flag:
+        state = "enabled"
+    for i in db:
+        await bot.send_message(i, f"Notifications {state} to {notif}")
+    return "ok"
+

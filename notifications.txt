@@ -30,6 +30,16 @@
 		'DEBTOR':1,
 		'REWARDMANAGER':1,
 		'SOHM':1
+	},
+	'states':{
+		'unstake': 1,
+	    'dao_transfer': 1,
+	    'transfer': 1,
+	    'minting': 1,
+	    'minter_role': 1,
+	    'treasury_balance': 1,
+	    'change_role': 1,
+	    'activate_role': 1
 	}
 	
 }
