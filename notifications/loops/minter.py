@@ -50,7 +50,6 @@ def getMinterChanges(timestamp):
     except requests.exceptions.Timeout as errt:
         print ("Timeout Error:",errt) 
         return {'data':{'transfers':[]}}
-    else:
 
 def action():
     timestamp = time.time() - INTERVAL_IN_SECONDS - 20
