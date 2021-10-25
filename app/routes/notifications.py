@@ -138,33 +138,33 @@ async def states():
 @router.post("/api/set_states")
 async def states(item: States):
     f = open("notifications.txt")
-    fake_db = eval(f.read())['states']
+    fake_db = eval(f.read())
     f.close()
 
     if item.unstake != 2:
-        fake_db["unstakes"] = item.unstake
+        fake_db['states']["unstakes"] = item.unstake
         change_state("unstake", item.unstake)
     if item.dao_transfer != 2:
-        fake_db["dao_transfer"] = item.dao_transfer
+        fake_db['states']["dao_transfer"] = item.dao_transfer
         change_state("dao transfers", item.dao_transfer)
     if item.transfer != 2:
-        fake_db["transfer"] = item.transfer
+        fake_db['states']["transfer"] = item.transfer
         change_state("all transfers", item.transfer)
     if item.minting != 2:
-        fake_db["minting"] = item.minting
+        fake_db['states']["minting"] = item.minting
         change_state("mintings", item.minting)
     if item.minter_role != 2:
-        fake_db["minter_role"] = item.minter_role
+        fake_db['states']["minter_role"] = item.minter_role
         change_state("minters role changes", item.minter_role)
     if item.treasury_balance != 2:
-        fake_db["treasury_balance"] = item.treasury_balance
+        fake_db['states']["treasury_balance"] = item.treasury_balance
         change_state("reserves changes", item.treasury_balance)
     if item.change_role != 2:
-        fake_db["change_role"] = item.changed_role
+        fake_db['states']["change_role"] = item.changed_role
         change_state("roles in queue", item.change_role)
     if item.activate_role != 2:
-        fake_db["activate_role"] = item.activate_role
-        change_state("roles activates")
+        fake_db['states']["activate_role"] = item.activate_role
+        change_state("roles activations")
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
