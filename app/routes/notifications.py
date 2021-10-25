@@ -109,8 +109,6 @@ async def handle_change_dao(item: Item):
 
 
 
-@router.post("/api/")
-
 @router.post("/api/change_large_transfer")
 async def handle_change_transfer(item: Item):
 
@@ -137,7 +135,7 @@ async def states():
 
     return {"data":fake_db}
 
-@router.get("/api/set_states")
+@router.post("/api/set_states")
 async def states(item: States):
     f = open("notifications.txt")
     fake_db = eval(f.read())['states']
