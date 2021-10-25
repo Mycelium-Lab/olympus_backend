@@ -143,28 +143,28 @@ async def states(item: States):
 
     if item.unstake != 2:
         fake_db['states']["unstake"] = item.unstake
-        change_state("unstakes", item.unstake)
+        await change_state("unstakes", item.unstake)
     if item.dao_transfer != 2:
         fake_db['states']["dao_transfer"] = item.dao_transfer
-        change_state("dao transfers", item.dao_transfer)
+        await change_state("dao transfers", item.dao_transfer)
     if item.transfer != 2:
         fake_db['states']["transfer"] = item.transfer
-        change_state("all transfers", item.transfer)
+        await change_state("all transfers", item.transfer)
     if item.minting != 2:
         fake_db['states']["minting"] = item.minting
-        change_state("mintings", item.minting)
+        await change_state("mintings", item.minting)
     if item.minter_role != 2:
         fake_db['states']["minter_role"] = item.minter_role
-        change_state("minters role changes", item.minter_role)
+        await change_state("minters role changes", item.minter_role)
     if item.treasury_balance != 2:
         fake_db['states']["treasury_balance"] = item.treasury_balance
-        change_state("reserves changes", item.treasury_balance)
+        await change_state("reserves changes", item.treasury_balance)
     if item.change_role != 2:
         fake_db['states']["change_role"] = item.changed_role
-        change_state("roles in queue", item.change_role)
+        await change_state("roles in queue", item.change_role)
     if item.activate_role != 2:
         fake_db['states']["activate_role"] = item.activate_role
-        change_state("roles activations", item.activate_role)
+        await change_state("roles activations", item.activate_role)
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))
