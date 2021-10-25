@@ -52,7 +52,8 @@ def getMinterChanges(timestamp):
         return {'data':{'transfers':[]}}
 
 def action():
-    transfers_data = getMinterChanges()
+    timestamp = time.time() - INTERVAL_IN_SECONDS - 20
+    transfers_data = getMinterChanges(timestamp)
     transfers_data = transfers_data['data']['minters']
     
     if transfers_data:
