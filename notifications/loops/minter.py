@@ -1,6 +1,5 @@
 import json
 import requests
-import pandas as pd
 import threading
 import time
 
