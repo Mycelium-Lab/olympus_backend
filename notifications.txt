@@ -41,5 +41,4 @@
 	    'change_role': 1,
 	    'activate_role': 1
 	}
-	
 }
