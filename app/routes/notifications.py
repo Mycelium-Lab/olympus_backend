@@ -163,8 +163,8 @@ async def states(item: States):
         fake_db["change_role"] = item.changed_role
         change_state("roles in queue", item.change_role)
     if item.activate_role != 2:
-        fake_db["activated roles"] = item.activate_role
-        change_state("")
+        fake_db["activate_role"] = item.activate_role
+        change_state("roles activates")
 
     f = open("notifications.txt",'w')
     f.write(str(fake_db))

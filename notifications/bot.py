@@ -140,7 +140,7 @@ async def minter(address):
         await bot.send_message(i, f"🟥 MINTER CHANGED to {address}")
     return "ok"
 
-async def chage_state(notif, flag):
+async def change_state(notif, flag):
     file_db = open('./notifications/fake_db.py')
     db = eval(file_db.read())
     file_db.close()
