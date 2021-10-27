@@ -13,7 +13,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
     queryString = "query balancesByWallet {"
 
     queryString += f"""
-        wallets(orderBy: birth, first: {cnt}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+        w0:wallets(orderBy: birth, first: {cnt}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
             id
             dailyBalance(orderBy: timestamp, first: 1000) {{
                 ohmBalance
@@ -26,7 +26,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
             break
         else:
             queryString += f"""
-                wallets(orderBy: birth, first: 1000, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+                w{i}:wallets(orderBy: birth, first: 1000, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
                     id
                     dailyBalance(orderBy: timestamp, first: 1000) {{
                         ohmBalance
@@ -44,18 +44,19 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
     
     days = {}
 
-    for res in result['wallets']:
-        for day in res['dailyBalance']:
+    for res in result['data']:
+        for day in result['data'][str(res)]:
             if (int(day['day']) >= day_start and int(day['day']) <= (day_start+period)):
-                if not (int(day['day']) in days):
-                    days[int(day['day'])] = {}
-                    days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
-                    days[int(day['day'])]['balance'] = int(day['ohmBalance']) / 1000000000
-                else:
-                    days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
-                    temp = days[int(day['day'])]['balance']
-                    temp += (int(day['ohmBalance'])/ 1000000000)
-                    days[int(day['day'])]['balance'] = temp
+                    if not (int(day['day']) in days):
+                        days[int(day['day'])] = {}
+                        days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
+                        days[int(day['day'])]['balance'] = int(day['ohmBalance']) / 1000000000
+                    else:
+                        days[int(day['day'])]['timestamp'] = 1609459200 + 86400*int(day['day'])
+                        temp = days[int(day['day'])]['balance']
+                        temp += (int(day['ohmBalance'])/ 1000000000)
+                        days[int(day['day'])]['balance'] = temp
+            
 
     days_array = []
     real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
