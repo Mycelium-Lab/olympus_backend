@@ -41,7 +41,6 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
     query = gql(queryString)
 
     result = await client.execute_async(query)
-    print(result['w0'][0])
     
     days = {}
 
