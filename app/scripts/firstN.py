@@ -21,7 +21,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
             }}
         }}
     """
-    for i in range(1,cnt/1000):
+    for i in range(1,int(cnt/1000)):
         if i > 5:
             break
         else:
