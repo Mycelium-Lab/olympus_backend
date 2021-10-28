@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from aiogram import types, Dispatcher, Bot
 from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change_transfer, transfer_dao, change_reserves, change_mint
 from pydantic import BaseModel
@@ -12,6 +12,10 @@ from app.scripts.transfer_to import getTransferTo
 from pydantic import BaseModel
 from app.routes import events
 from app.routes import notifications
+from sqlalchemy.orm import Session
+from .schemas import CreateUserRequest
+from .database import get_db
+from .models import User
 
 
 app = FastAPI()
@@ -53,6 +57,30 @@ async def bot_webhook(update: dict):
 @app.on_event("shutdown")
 async def on_shutdown():
     await bot.session.close()
+
+@app.post("/")
+def create(details: CreateUserRequest, db: Session = Depends(get_db)):
+    to_create = User(
+        login=details.login,
+        password=details.password
+        telegram=details.telegram
+    )
+    db.add(to_create)
+    db.commit()
+    return { 
+        "success": True,
+        "created_id": to_create.id
+    }
+
+@app.get("/")
+def get_by_id(id: int, db: Session = Depends(get_db)):
+    return db.query(User).filter(User.id == id).first()
+
+@app.delete("/")
+def delete(id: int, db: Session = Depends(get_db)):
+    db.query(User).filter(User.id == id).delete()
+    db.commit()
+    return { "success": True } 
 
 @app.get("/api/get_top_days/")
 async def get_top_days(start: int = 1617291702, days: int = 1, amount: int = 10000):
