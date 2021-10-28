@@ -6,7 +6,9 @@ from sqlalchemy.orm import sessionmaker
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:mysuperpassword@localhost/olympus"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
+print(engine)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+print(SessionLocal)
 
 Base = declarative_base()
 

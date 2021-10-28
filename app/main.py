@@ -60,13 +60,16 @@ async def on_shutdown():
 
 @app.post("/")
 def create(details: CreateUserRequest, db: Session = Depends(get_db)):
+    print("request ok")
     to_create = User(
         login=details.login,
-        password=details.password
-        telegram=details.telegram
+        hash=details.password,
+        telegram_id=details.telegram
     )
+    print("create ok")
     db.add(to_create)
     db.commit()
+    print("commit ok")
     return { 
         "success": True,
         "created_id": to_create.id
