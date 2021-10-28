@@ -12,21 +12,36 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
 
     queryString = "query balancesByWallet {"
 
-    queryString += f"""
-        w0:wallets(orderBy: birth, first: 1000, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
-            id
-            dailyBalance(orderBy: timestamp, first: 1000) {{
-                ohmBalance
-                day
+    if cnt >= 1000:
+        queryString += f"""
+            w0:wallets(orderBy: birth, first: 1000, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+                id
+                dailyBalance(orderBy: timestamp, first: 1000) {{
+                    ohmBalance
+                    day
+                }}
             }}
-        }}
-    """
+        """
+    else:
+        queryString += f"""
+            w0:wallets(orderBy: birth, first: {cnt%1000}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+                id
+                dailyBalance(orderBy: timestamp, first: 1000) {{
+                    ohmBalance
+                    day
+                }}
+            }}
+        """
     for i in range(1,int(cnt/1000)):
         if i > 5:
             break
         else:
+            first = 1000
+            if cnt/i < 1000:
+                first = cnt % 1000
+                print(first)
             queryString += f"""
-                w{i}:wallets(orderBy: birth, first: 1000, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+                w{i}:wallets(orderBy: birth, first: {first}, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
                     id
                     dailyBalance(orderBy: timestamp, first: 1000) {{
                         ohmBalance
