@@ -14,7 +14,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
 
     if cnt >= 1000:
         queryString += f"""
-            w0:wallets(orderBy: birth, first: 1000, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+            w0:wallets(orderBy: birth, first: 1000, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f"]}}) {{
                 id
                 dailyBalance(orderBy: timestamp, first: 1000) {{
                     ohmBalance
@@ -24,7 +24,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
         """
     else:
         queryString += f"""
-            w0:wallets(orderBy: birth, first: {cnt%1000}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+            w0:wallets(orderBy: birth, first: {cnt%1000}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f"]}}) {{
                 id
                 dailyBalance(orderBy: timestamp, first: 1000) {{
                     ohmBalance
@@ -41,7 +41,7 @@ async def getFirstWallets(timestamp_start, period, cnt=None):
                 first = cnt % 1000
                 print(first)
             queryString += f"""
-                w{i}:wallets(orderBy: birth, first: {first}, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+                w{i}:wallets(orderBy: birth, first: {first}, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f"]}}) {{
                     id
                     dailyBalance(orderBy: timestamp, first: 1000) {{
                         ohmBalance
