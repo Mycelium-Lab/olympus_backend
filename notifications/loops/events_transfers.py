@@ -24,13 +24,13 @@ def handle_event(event):
         amount = float(float(i['value'])/1000000000)
         print(amount)
         if (i['from'] == "0x245cc372C84B3645Bf0Ffe6538620B04a217988B"):
-            requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer_dao?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
+            requests.get(f"http://localhost:8000/transfer_dao?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
         elif (i['from'] == "0xfd31c7d00ca47653c6ce64af53c1571f9c36566a") or (i['from'] == "0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a"):
-            requests.get(f"https://977c-62-84-119-83.ngrok.io/unstake?amount={amount}&to={i['to']}&id={tx}")
+            requests.get(f"http://localhost:8000/unstake?amount={amount}&to={i['to']}&id={tx}")
         elif i['from'] == "0x383518188C0C6d7730D91b2c03a03C837814a899":
-            requests.get(f"https://977c-62-84-119-83.ngrok.io/mint?amount={amount}&to={i['to']}&tx={tx}")
+            requests.get(f"http://localhost:8000/mint?amount={amount}&to={i['to']}&tx={tx}")
         else:
-            requests.get(f"https://977c-62-84-119-83.ngrok.io/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
+            requests.get(f"http://localhost:8000/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}")
     elif event['event']=="ChangeQueued":
         role = ""
         if event['args']['managing']==0:
@@ -63,7 +63,7 @@ def handle_event(event):
         elif event['args']['managing']==9:
             role = "SOHM"
             print("SOHM "+event['args']['queued'])
-        requests.get(f"https://977c-62-84-119-83.ngrok.io/change_role?role={role}&address={event['args']['queued'].hex()}")
+        requests.get(f"http://localhost:8000/change_role?role={role}&address={event['args']['queued'].hex()}")
     elif event['event']=="ChangeActivated":
         role = ""
         if event['args']['managing']==0:
@@ -96,11 +96,11 @@ def handle_event(event):
         elif event['args']['managing']==9:
             role = "SOHM"
             print("SOHM "+event['args']['activated']+" "+str(event['args']['result']))
-        requests.get(f"https://977c-62-84-119-83.ngrok.io/activate_role?role={role}&address={event['args']['activated'].hex()}&activated={str(event['args']['result'])}")
+        requests.get(f"http://localhost:8000/activate_role?role={role}&address={event['args']['activated'].hex()}&activated={str(event['args']['result'])}")
     elif event['event']=="ReservesManaged":
         print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
         token = getTokenName(event['args']['token'])
-        requests.get(f"https://977c-62-84-119-83.ngrok.io/reserves_managed?amount={event['args']['amount']*(10**-18)}&token={token}")
+        requests.get(f"http://localhost:8000/reserves_managed?amount={event['args']['amount']*(10**-18)}&token={token}")
     else:
         print(event)
 
