@@ -56,9 +56,9 @@ async def on_shutdown():
 
 
 @app.get("/twitter/get_id")
-async def get_user_id():
+async def get_user_id(usernames: str=""):
     headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAAMBVQEAAAAAM53SnmlTm5qvzqacgc2W0aPuyUQ%3D4VjOnXdLv99M3Jx3r6WZn3UtWoTr3CMLGQecA3Irt8sLlpGIkn"}
-    response  = requests.get("https://api.twitter.com/2/users/by?usernames=OlympusDAO,ohmzeus,OlympusAgora", headers=headers).json()
+    response  = requests.get(f"https://api.twitter.com/2/users/by?usernames={usernames}", headers=headers).json()
     return response
 
 @app.get("/twitter/get_tweets")
