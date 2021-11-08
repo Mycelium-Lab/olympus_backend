@@ -31,8 +31,7 @@ app.add_middleware(
 WEBHOOK_PATH = f"/bot/{TOKEN}"
 WEBHOOK_URL = "https://977c-62-84-119-83.ngrok.io" + WEBHOOK_PATH
 
-app.include_router(events.router)
-app.include_router(notifications.router)
+
 
 
 @app.on_event("startup")
@@ -67,6 +66,9 @@ async def get_user_id(uid: str = ""):
     headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAAMBVQEAAAAAM53SnmlTm5qvzqacgc2W0aPuyUQ%3D4VjOnXdLv99M3Jx3r6WZn3UtWoTr3CMLGQecA3Irt8sLlpGIkn"}
     response  = requests.get(f"https://api.twitter.com/2/users/{uid}/tweets?max_results=25&expansions=author_id&user.fields=username,id,name,created_at,profile_image_url&tweet.fields=id,text,created_at", headers=headers).json()
     return response
+
+app.include_router(events.router)
+app.include_router(notifications.router)
 
 @app.get("/api/get_top_days/")
 async def get_top_days(start: int = 1617291702, days: int = 1, amount: int = 10000):
