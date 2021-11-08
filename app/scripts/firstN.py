@@ -8,26 +8,21 @@ async def getFirstLegacy(timestamp_start, period, cnt=None):
 
     queryString = "query balancesByWallet {"
 
-    if cnt >= 1000:
-        queryString += f"""
-            w0:wallets(orderBy: birth, first: 1000, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f"]}}) {{
-                id
-                dailyBalance(orderBy: timestamp, first: 1000) {{
-                    ohmBalance
-                    day
-                }}
+
+    first = 1000
+
+    if cnt < 1000:
+        first = cnt % 1000
+
+    queryString += f"""
+        w0:wallets(orderBy: birth, first: {first}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
+            id
+            dailyBalance(orderBy: timestamp, first: 1000) {{
+                ohmBalance
+                day
             }}
-        """
-    else:
-        queryString += f"""
-            w0:wallets(orderBy: birth, first: {cnt%1000}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f"]}}) {{
-                id
-                dailyBalance(orderBy: timestamp, first: 1000) {{
-                    ohmBalance
-                    day
-                }}
-            }}
-        """
+        }}
+    """
     for i in range(1,int(cnt/1000)):
         if i > 5:
             break
@@ -37,7 +32,7 @@ async def getFirstLegacy(timestamp_start, period, cnt=None):
                 first = cnt % 1000
                 print(first)
             queryString += f"""
-                w{i}:wallets(orderBy: birth, first: {first}, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2", "0xbe731507810c8747c3e01e62c676b1ca6f93242f"]}}) {{
+                w{i}:wallets(orderBy: birth, first: {first}, skip: {1000*i}, where: {{address_not_in:["0xfd31c7d00ca47653c6ce64af53c1571f9c36566a","0x0822f3c03dcc24d200aff33493dc08d0e1f274a2"]}}) {{
                     id
                     dailyBalance(orderBy: timestamp, first: 1000) {{
                         ohmBalance
@@ -47,16 +42,13 @@ async def getFirstLegacy(timestamp_start, period, cnt=None):
             """
     queryString += "}"
     # balance before listing
-    
-
-    query = gql(queryString)
-
-    result = await client.execute_async(query)
+    request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': queryString})
+    result = request.json()
     
     days = {}
 
-    for res in result:
-        for wallet in result[str(res)]:
+    for res in result['data']:
+        for wallet in result['data'][str(res)]:
             for day in wallet['dailyBalance']:
                 if (int(day['day']) >= day_start and int(day['day']) <= (day_start+period)):
                         if not (int(day['day']) in days):
