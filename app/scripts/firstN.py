@@ -73,7 +73,7 @@ async def getFirstLegacy(timestamp_start, period, cnt=None):
             if i!= 0:
                 tempDay['balance'] = days_array[i-1]['balance']
             else:
-                tempDay['balance'] = "0"
+                tempDay['balance'] = 0
             days_array.append(tempDay)
 
 
@@ -155,20 +155,20 @@ async def getFirstWalletsNDays(timestamp_start, period, cnt=None, days=1):
 
     days_array = []
     real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
-    for i in range(0, real_day+period, days):
-        if i in days_dict:
-            days_array.append(days_dict[i])
-        else:
-            tempDay = {}
-            tempDay['timestamp'] = 1609459200 + 86400*int(i)
-            if i!= 0:
-                tempDay['balance'] = days_array[i-1]['balance']
+    for i in range(0, real_day+period):
+            if (i in days_dict):
+                days_array.append(days_dict[i])
             else:
-                tempDay['balance'] = "0"
-            days_array.append(tempDay)
+                tempDay = {}
+                tempDay['timestamp'] = 1609459200 + 86400*int(i)
+                if i!= 0:
+                    tempDay['balance'] = days_array[i-1]['balance']
+                else:
+                    tempDay['balance'] = 0
+                days_array.append(tempDay)
 
 
-    return days_array[real_day:real_day+period]
+    return days_array[real_day:real_day+period:days]
 
 
 async def getFirstWalletsNHours(timestamp_start, period, cnt=None, hours=1):
@@ -185,7 +185,7 @@ async def getFirstWalletsNHours(timestamp_start, period, cnt=None, hours=1):
                         hours_dict[(int(day['day'])+1)*(int(hour['hour'])+1)]['timestamp'] = 1609459200 + 3600*(int(day['day'])+1)*(int(hour['hour'])+1)
                         hours_dict[(int(day['day'])+1)*(int(hour['hour'])+1)]['balance'] = int(hour['ohmBalance']) / 1000000000
                     else:
-                        hours_dict[int(day['day'])*int(hour['hour'])]['timestamp'] = 1609459200 + 3600*(int(day['day'])+1)*(int(hour['hour'])+1)
+                        hours_dict[int(day['day']+1)*int(hour['hour'])+1]['timestamp'] = 1609459200 + 3600*(int(day['day'])+1)*(int(hour['hour'])+1)
                         temp = hours_dict[(int(day['day'])+1)*(int(hour['hour'])+1)]['balance']
                         temp += (int(hour['ohmBalance'])/ 1000000000)
                         hours_dict[(int(day['day'])+1)*(int(hour['hour'])+1)]['balance'] = temp
@@ -193,7 +193,7 @@ async def getFirstWalletsNHours(timestamp_start, period, cnt=None, hours=1):
     hours_array = []
     real_day = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_yday
     real_hour = datetime.fromtimestamp(int(timestamp_start)).timetuple().tm_hour
-    for i in range(0, (real_day+1)*real_hour+period, hours):
+    for i in range(0, (real_day+1)*real_hour+period):
         if i in hours_dict:
             hours_array.append(hours_dict[i])
         else:
@@ -202,10 +202,10 @@ async def getFirstWalletsNHours(timestamp_start, period, cnt=None, hours=1):
             if i!= 0:
                 tempHour['balance'] = hours_array[i-1]['balance']
             else:
-                tempHour['balance'] = "0"
+                tempHour['balance'] = 0
             hours_array.append(tempHour)
 
 
-    return hours_array[(real_day+1)*(real_hour+1):(real_day+1)*real_hour*(real_hour+1)+period]
+    return hours_array[(real_day+1)*(real_hour+1):(real_day+1)*real_hour*(real_hour+1)+period:hours]
 
 

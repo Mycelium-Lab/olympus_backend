@@ -111,8 +111,8 @@ async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1, st
     return {"data":response}
 
 @app.get("/api/get_first_n_hours_n/")
-async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1, steps: int = 1):
-    response  = await getFirstWalletsNHours(start, days, count, steps)
+async def get_first_n(start: int = 1617291702, hours: int = 1, count: int = 1, steps: int = 1):
+    response  = await getFirstWalletsNHours(start, hours, count, steps)
     return {"data":response}
 
 @app.get("/api/get_first_n/")
