@@ -115,7 +115,7 @@ async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1, st
     response  = await getFirstWalletsNHours(start, days, count, steps)
     return {"data":response}
 
-@app.get("/api/get_first_legacy/")
+@app.get("/api/get_first_n/")
 async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1):
     response  = await getFirstLegacy(start, days, count)
     return {"data":response}
