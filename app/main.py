@@ -4,7 +4,7 @@ from notifications.bot import dp, bot, TOKEN, change_unstake, change_dao, change
 from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
-from app.scripts.firstN import getFirstWallets
+from app.scripts.firstN import getFirstWallets, getFirstWalletsNDays, getFirstWalletsNHours, getFirstLegacy
 from app.scripts.getTotal import totalWallets, totalBalances
 from fastapi.middleware.cors import CORSMiddleware
 from app.scripts.transfer import getTransfer
@@ -12,6 +12,7 @@ from app.scripts.transfer_to import getTransferTo
 from pydantic import BaseModel
 from app.routes import events
 from app.routes import notifications
+import requests
 
 
 app = FastAPI()
@@ -54,6 +55,19 @@ async def bot_webhook(update: dict):
 async def on_shutdown():
     await bot.session.close()
 
+
+@app.get("/twitter/get_id")
+async def get_user_id():
+    headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAAMBVQEAAAAAM53SnmlTm5qvzqacgc2W0aPuyUQ%3D4VjOnXdLv99M3Jx3r6WZn3UtWoTr3CMLGQecA3Irt8sLlpGIkn"}
+    response  = requests.get("https://api.twitter.com/2/users/by?usernames=OlympusDAO,ohmzeus,OlympusAgora", headers=headers).json()
+    return response
+
+@app.get("/twitter/get_tweets")
+async def get_user_id(uid: str = ""):
+    headers = {"Authorization": "Bearer AAAAAAAAAAAAAAAAAAAAAAMBVQEAAAAAM53SnmlTm5qvzqacgc2W0aPuyUQ%3D4VjOnXdLv99M3Jx3r6WZn3UtWoTr3CMLGQecA3Irt8sLlpGIkn"}
+    response  = requests.get(f"https://api.twitter.com/2/users/{uid}/tweets?max_results=25&expansions=author_id&user.fields=username,id,name,created_at,profile_image_url&tweet.fields=id,text,created_at", headers=headers).json()
+    return response
+
 @app.get("/api/get_top_days/")
 async def get_top_days(start: int = 1617291702, days: int = 1, amount: int = 10000):
 
@@ -65,6 +79,7 @@ async def get_transfer_from(start: int = 1617291702, days: int = 1):
 
     response  = await getTransfer(start, days)
     return {"data":response}
+
 
 @app.get("/api/get_transfer_to/")
 async def get_transfer_to(start: int = 1617291702, days: int = 1):
@@ -88,10 +103,23 @@ async def get_total_balances(start: int = 1617291702, days: int = 1):
     response  = await totalBalances(start, days)
     return {"data":response}
 
-@app.get("/api/get_first_n/")
-async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1):
-    response  = await getFirstWallets(start, days, count)
+@app.get("/api/get_first_n_days_n/")
+async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1, steps: int = 1):
+    response  = await getFirstWalletsNDays(start, days, count, steps)
     return {"data":response}
+
+@app.get("/api/get_first_n_hours_n/")
+async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1, steps: int = 1):
+    response  = await getFirstWalletsNHours(start, days, count, steps)
+    return {"data":response}
+
+@app.get("/api/get_first_legacy/")
+async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1):
+    response  = await getFirstLegacy(start, days, count)
+    return {"data":response}
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080)
+
+    #https://api.telegram.org/bot2006547998:AAFvcPVaPciAfCbjKQrFk2UwFsUkse_Yok8/setWebhook?url=https://535b-62-84-117-55.ngrok.io/
