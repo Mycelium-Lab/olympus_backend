@@ -18,8 +18,6 @@ def getLogRebases(start, end):
 
 async def rebaseTimestamps(start, end):
 
-	print(getLogRebases(start, end))
-
 	rebases = getLogRebases(start, end)['data']['logRebases']
 	result = []
 

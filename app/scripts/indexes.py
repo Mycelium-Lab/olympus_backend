@@ -35,7 +35,7 @@ async def parseNDays(timestamp_start, end, n):
 		if int(i['timestamp']) >= timestamp_start:
 			obj = {}
 			obj['timestamp'] = int(i['timestamp']) + 86400
-			obj['index'] = int(i['index'])
+			obj['index'] = round(int(i['index']) / 1000000000, 3)
 
 			result.append(obj)
 
@@ -105,12 +105,12 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 		tempObj = {}
 		tempObj['timestamp'] = i
 		if i in main_dict:
-			tempObj['index'] = int(main_dict[i])
+			tempObj['index'] = round(int(main_dict[i]) / 1000000000, 3)
 		else:
 			if cnt == 0:
-				tempObj['index'] = int(nearest)
+				tempObj['index'] = round(int(nearest) / 1000000000, 3)
 			else:
-				tempObj['index'] = int(result[cnt-1]['index'])
+				tempObj['index'] = result[cnt-1]['index']
 		cnt += 1
 		result.append(tempObj)
 
@@ -134,12 +134,12 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 		tempObj = {}
 		tempObj['timestamp'] = i
 		if i in main_dict:
-			tempObj['index'] = int(main_dict[i])
+			tempObj['index'] = round(int(main_dict[i]) / 1000000000, 3)
 		else:
 			if cnt == 0:
-				tempObj['index'] = int(nearest)
+				tempObj['index'] = round(int(nearest) / 1000000000, 3)
 			else:
-				tempObj['index'] = int(result[cnt-1]['index'])
+				tempObj['index'] = result[cnt-1]['index']
 		cnt += 1
 		result.append(tempObj)
 
