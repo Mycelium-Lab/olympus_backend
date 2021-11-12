@@ -109,17 +109,17 @@ async def get_total_balances(start: int = 1617291702, days: int = 1):
 
 # NEW CODE
 @app.get("/api/get_index_n_days")
-async def get_total_balances(start: int = 1617291702, days: int = 1, n: int = 1):
+async def get_indexes_n_days(start: int = 1617291702, days: int = 1, n: int = 1):
     response  = await parseNDays(start, days, n)
     return {"data":response}
 
 @app.get("/api/get_index_n_hours")
-async def get_total_balances(start: int = 1617291702, hours: int = 1, n: int = 1):
+async def get_index_n_hours(start: int = 1617291702, hours: int = 1, n: int = 1):
     response  = await parseNHours(start, hours, n)
     return {"data":response}
 
 @app.get("/api/get_rebase_timestamps")
-async def get_total_balances(start: int = 1617291702, timestamps: int = 1):
+async def get_rebase_timestamps(start: int = 1617291702, timestamps: int = 1):
     response  = await rebaseTimestamps(start, timestamps)
     return {"data":response}
 
