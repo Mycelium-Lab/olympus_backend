@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
 from app.scripts.firstN import getFirstWallets, getFirstWalletsNDays, getFirstWalletsNHours, getFirstLegacy
+from app.scripts.indexes import parseNDays, parseNHours
+from app.scripts.rebases import rebaseTimestamps
 from app.scripts.getTotal import totalWallets, totalBalances
 from fastapi.middleware.cors import CORSMiddleware
 from app.scripts.transfer import getTransfer
@@ -30,7 +32,6 @@ app.add_middleware(
 
 WEBHOOK_PATH = f"/bot/{TOKEN}"
 WEBHOOK_URL = "https://977c-62-84-119-83.ngrok.io" + WEBHOOK_PATH
-
 
 
 
@@ -105,14 +106,21 @@ async def get_total_balances(start: int = 1617291702, days: int = 1):
     response  = await totalBalances(start, days)
     return {"data":response}
 
-@app.get("/api/get_first_n_days_n/")
-async def get_first_n(start: int = 1617291702, days: int = 1, count: int = 1, steps: int = 1):
-    response  = await getFirstWalletsNDays(start, days, count, steps)
+
+# NEW CODE
+@app.get("/api/get_index_n_days")
+async def get_total_balances(start: int = 1617291702, days: int = 1, n: int = 1):
+    response  = await parseNDays(start, days, n)
     return {"data":response}
 
-@app.get("/api/get_first_n_hours_n/")
-async def get_first_n(start: int = 1617291702, hours: int = 1, count: int = 1, steps: int = 1):
-    response  = await getFirstWalletsNHours(start, hours, count, steps)
+@app.get("/api/get_index_n_hours")
+async def get_total_balances(start: int = 1617291702, hours: int = 1, n: int = 1):
+    response  = await parseNHours(start, hours, n)
+    return {"data":response}
+
+@app.get("/api/get_rebase_timestamps")
+async def get_total_balances(start: int = 1617291702, timestamps: int = 1):
+    response  = await rebaseTimestamps(start, timestamps)
     return {"data":response}
 
 @app.get("/api/get_first_n/")
