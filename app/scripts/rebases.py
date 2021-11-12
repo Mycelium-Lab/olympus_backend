@@ -24,4 +24,4 @@ async def rebaseTimestamps(start, end):
 	for i in rebases:
 		result.append(int(i['timestamp']))
 
-	return result[:timestamps]
+	return result[]
