@@ -4,7 +4,7 @@ from datetime import datetime
 def getLogRebases(start, end):
 
 	queryString = f"""query getLogRebases {{
-		logRebases(orderBy: timestamp, first:1000, where:{{timestamp_gte: {start}, timestamps_lte: {end}}}){{
+		logRebases(orderBy: timestamp, first:1000, where:{{timestamp_gte: {start}, timestamp_lte: {end}}}){{
 		    timestamp
 		}}
 	}}
@@ -17,6 +17,8 @@ def getLogRebases(start, end):
 
 
 async def rebaseTimestamps(start, end):
+
+	print(getLogRebases(start, end))
 
 	rebases = getLogRebases(start, end)['data']['logRebases']
 	result = []
