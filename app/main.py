@@ -114,12 +114,12 @@ async def get_indexes_n_days(start: int = 1617291702, end: int = 1636458860, n: 
     return {"data":response}
 
 @app.get("/api/get_index_n_hours")
-async def get_index_n_hours(start: int = 1623700800, end: int = 1624705200, n: int = 1):
+async def get_index_n_hours(start: int = 1623700800, end: int = 1623906000, n: int = 1):
     response  = await parseNHours(start, end, n)
     return {"data":response}
 
 @app.get("/api/get_index_n_minutes")
-async def get_index_n_minutes(start: int = 1623702000, end: int = 1624648380, n: int = 1):
+async def get_index_n_minutes(start: int = 1623702000, end: int = 1623907200, n: int = 1):
     response  = await parseNMinutes(start, end, n)
     return {"data":response}
 
