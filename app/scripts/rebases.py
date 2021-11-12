@@ -1,10 +1,10 @@
 import requests
 from datetime import datetime
 
-def getLogRebases(start):
+def getLogRebases(start, end):
 
 	queryString = f"""query getLogRebases {{
-		logRebases(orderBy: timestamp, first:1000, where:{{timestamp_gt: {start}}}){{
+		logRebases(orderBy: timestamp, first:1000, where:{{timestamp_gte: {start}, timestamps_lte: {end}}}){{
 		    timestamp
 		}}
 	}}
@@ -16,9 +16,9 @@ def getLogRebases(start):
 	return result
 
 
-async def rebaseTimestamps(start, timestamps):
+async def rebaseTimestamps(start, end):
 
-	rebases = getLogRebases(start)['data']['logRebases']
+	rebases = getLogRebases(start, end)['data']['logRebases']
 	result = []
 
 	for i in rebases:

@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from app.scripts.getTop import getTopBalances
 from app.scripts.getBalance import getBalances
 from app.scripts.firstN import getFirstWallets, getFirstWalletsNDays, getFirstWalletsNHours, getFirstLegacy
-from app.scripts.indexes import parseNDays, parseNHours
+from app.scripts.indexes import parseNDays, parseNHours, parseNMinutes
 from app.scripts.rebases import rebaseTimestamps
 from app.scripts.getTotal import totalWallets, totalBalances
 from fastapi.middleware.cors import CORSMiddleware
@@ -109,17 +109,22 @@ async def get_total_balances(start: int = 1617291702, days: int = 1):
 
 # NEW CODE
 @app.get("/api/get_index_n_days")
-async def get_indexes_n_days(start: int = 1617291702, days: int = 1, n: int = 1):
-    response  = await parseNDays(start, days, n)
+async def get_indexes_n_days(start: int = 1617291702, end: int = 1636458860, n: int = 1):
+    response  = await parseNDays(start, end, n)
     return {"data":response}
 
 @app.get("/api/get_index_n_hours")
-async def get_index_n_hours(start: int = 1617291702, hours: int = 1, n: int = 1):
-    response  = await parseNHours(start, hours, n)
+async def get_index_n_hours(start: int = 1617291702, end: int = 1617364460, n: int = 1):
+    response  = await parseNHours(start, end, n)
+    return {"data":response}
+
+@app.get("/api/get_index_n_minutes")
+async def get_index_n_minutes(start: int = 1617291702, end: int = 1617364460, n: int = 1):
+    response  = await parseNMinutes(start, end, n)
     return {"data":response}
 
 @app.get("/api/get_rebase_timestamps")
-async def get_rebase_timestamps(start: int = 1617291702, timestamps: int = 1):
+async def get_rebase_timestamps(start: int = 1617291702, end: int = 1636458860):
     response  = await rebaseTimestamps(start, timestamps)
     return {"data":response}
 

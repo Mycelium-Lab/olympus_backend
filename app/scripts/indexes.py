@@ -1,16 +1,16 @@
 import requests
 from datetime import datetime
 
-def getLogRebases():
+def getLogRebases(end):
 
 	queryString = f"""query getLogRebases {{
-		logRebaseDailies(orderBy: timestamp, first:1000) {{
+		logRebaseDailies(orderBy: timestamp, first:1000, where:{{timestamp_lte:"{end}"}}) {{
 			timestamp
 			index
-			hours(orderBy: timestamp, first:24) {{
+			hours(orderBy: timestamp, first:24, where:{{timestamp_lte:"{end}"}}) {{
 				timestamp
 				index
-				minutes(orderBy: timestamp, first:60) {{
+				minutes(orderBy: timestamp, first:60, where:{{timestamp_lte:"{end}"}}) {{
 					timestamp
 					index
 				}}
@@ -25,9 +25,11 @@ def getLogRebases():
 	return result
 
 
-async def parseNDays(timestamp_start, period, n):
+async def parseNDays(timestamp_start, end, n):
 
-	days = getLogRebases()['data']['logRebaseDailies']
+	timestamp_start -= 86400
+
+	days = getLogRebases(end)['data']['logRebaseDailies']
 	result = []
 	for i in days:
 		if int(i['timestamp']) >= timestamp_start:
@@ -37,53 +39,114 @@ async def parseNDays(timestamp_start, period, n):
 
 			result.append(obj)
 
-	return result[:period:n]
-
-
-async def parseNHours(timestamp_start, period, n):
-
-	days = getLogRebases()['data']['logRebaseDailies']
-	result = []
-	for i in days:
-		for j in range(0, 86400, 3600):
-			obj = {}
-			obj['timestamp'] = int(i['timestamp'])+j+3600
-
-			if obj['timestamp'] >= timestamp_start:
-				f = next((item for item in i['hours'] if item["timestamp"] == f"{int(i['timestamp'])+j}"), None)
-				if f == None:
-					if len(result) == 0:
-						obj['index'] = 0
-					else:
-						obj['index'] = int(result[-1]['index'])
-				else:
-					obj['index'] = int(f['index'])
-
-				result.append(obj)
-
-	return result[:period*n:n]
-
-async def parseNMinutes(timestamp_start, period, n):
-
-	days = getLogRebases()['data']['logRebaseDailies']
-	result = []
-	for i in days:
-		for j in range(0, 86400, 3600):
-			f = next((item for item in i['hours'] if item["timestamp"] == f"{obj['timestamp']}"), None)
-			for k in (0, 3600, 60):
-				obj = {}
-				obj['timestamp'] = int(i['timestamp'])+ j + 3600 + k 
-				
-				if f == None:
-					if len(result) == 0:
-						obj['index'] = 0
-					else:
-						obj['index'] = int(result[-1]['index'])
-				else:
-					obj['index'] = int(f['index'])
-
-				result.append(obj)
-
 	return result[::n]
+
+
+def parseDictHours(array, end):
+
+	result = {}
+
+	for i in array:
+		for k in i['hours']:
+			if int(k['timestamp']) <= end:
+				result[int(k['timestamp'])] = k['index']
+			else:
+				return result
+
+	return result
+
+def parseDictMinutes(array, end):
+
+	result = {}
+
+	for i in array:
+		for j in i['hours']:
+			for k in j['minutes']:
+				if int(k['timestamp']) <= end:
+					result[int(k['timestamp'])] = k['index']
+				else:
+					return result
+
+	return result
+
+def searchNearestHours(start, dicts):
+	if start <= 1623700800:
+		return 0
+	else:
+		for i in range(start, 1623700800, -3600):
+			if i in dicts:
+				return dicts[i]
+		return dicts[1623700800]
+
+def searchNearest(start, dicts):
+	if start <= 1623702000:
+		return 0
+	else:
+		for i in range(start, 1623702000, -60):
+			if i in dicts:
+				return dicts[i]
+		return dicts[1623702000]
+
+async def parseNHours(timestamp_start, timestamp_end, n):
+
+	minutes = getLogRebases(timestamp_end)['data']['logRebaseDailies']
+
+	start = timestamp_start - (timestamp_start % (3600*n))
+	end = timestamp_end - (timestamp_end % (3600*n))
+
+	main_dict = parseDictHours(minutes, end)
+
+	result = []
+	cnt = 0
+
+	nearest = searchNearestHours(start, main_dict)
+
+	for i in range(start, end, 3600):
+		tempObj = {}
+		tempObj['timestamp'] = i
+		if i in main_dict:
+			tempObj['index'] = int(main_dict[i])
+			print('ok')
+		else:
+			if cnt == 0:
+				tempObj['index'] = int(nearest)
+			else:
+				tempObj['index'] = int(result[cnt-1]['index'])
+		cnt += 1
+		result.append(tempObj)
+
+	return result[n::n]
+
+async def parseNMinutes(timestamp_start, timestamp_end, n):
+
+	minutes = getLogRebases(timestamp_end)['data']['logRebaseDailies']
+
+	start = timestamp_start - (timestamp_start % (60*n))
+	end = timestamp_end - (timestamp_end % (60*n))
+
+	main_dict = parseDictMinutes(minutes, end)
+
+	result = []
+	cnt = 0
+
+	nearest = searchNearest(start, main_dict)
+
+	for i in range(start, end, 60):
+		tempObj = {}
+		tempObj['timestamp'] = i
+		if i in main_dict:
+			tempObj['index'] = int(main_dict[i])
+			print('ok')
+		else:
+			if cnt == 0:
+				tempObj['index'] = int(nearest)
+			else:
+				tempObj['index'] = int(result[cnt-1]['index'])
+		cnt += 1
+		result.append(tempObj)
+
+	return result[n::n]
+
+
 
 
