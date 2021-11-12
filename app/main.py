@@ -125,7 +125,7 @@ async def get_index_n_minutes(start: int = 1617291702, end: int = 1617364460, n:
 
 @app.get("/api/get_rebase_timestamps")
 async def get_rebase_timestamps(start: int = 1617291702, end: int = 1636458860):
-    response  = await rebaseTimestamps(start, timestamps)
+    response  = await rebaseTimestamps(start, end)
     return {"data":response}
 
 @app.get("/api/get_first_n/")
