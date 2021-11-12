@@ -106,7 +106,6 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 		tempObj['timestamp'] = i
 		if i in main_dict:
 			tempObj['index'] = int(main_dict[i])
-			print('ok')
 		else:
 			if cnt == 0:
 				tempObj['index'] = int(nearest)
@@ -136,7 +135,6 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 		tempObj['timestamp'] = i
 		if i in main_dict:
 			tempObj['index'] = int(main_dict[i])
-			print('ok')
 		else:
 			if cnt == 0:
 				tempObj['index'] = int(nearest)
