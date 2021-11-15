@@ -1,6 +1,8 @@
 import requests
 from datetime import datetime
 
+
+#запрос к thegraph
 def getLogRebases(end):
 
 	queryString = f"""query getLogRebases {{
@@ -25,6 +27,7 @@ def getLogRebases(end):
 	return result
 
 
+#функция парсинга дней
 async def parseNDays(timestamp_start, timestamp_end, n):
 
 	start = timestamp_start - (timestamp_start % (86400*n))
@@ -40,7 +43,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 
 		for i in range(start, int(first_timestamp), 86400):
 			obj = {}
-			obj['timestamp'] = i
+			obj['timestamp'] = i - (n-1)*86400
 			obj['index'] = 0
 
 			result.append(obj)
@@ -68,8 +71,29 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 			obj['index'] = 0
 
 			result.append(obj)
+		
+	new_result = []
+	cnt = 0
 
-	return result[::n]
+	for i in result:
+
+		if cnt % n == 0:
+
+			obj = {}
+			obj['timestamp'] = i['timestamp']
+			obj['index'] = i['index']
+
+			new_result.append(obj)
+
+		else:
+
+			if i['timestamp'] <= int(last_timestamp):
+
+				new_result[-1]['index'] = i['index']
+
+		cnt += 1
+
+	return new_result
 
 
 def parseDictHours(array, end):
@@ -99,6 +123,7 @@ def parseDictMinutes(array, end):
 
 	return result
 
+
 def searchNearestHours(start, dicts):
 	if start <= 1623700800:
 		return 0
@@ -119,12 +144,14 @@ def searchNearest(start, dicts):
 
 async def parseNHours(timestamp_start, timestamp_end, n):
 
-	hours = getLogRebases(timestamp_end)['data']['logRebaseDailies']
+	hours = getLogRebases(timestamp_end+86400)['data']['logRebaseDailies']
 
 	start = timestamp_start - (timestamp_start % (3600*n))
 	end = timestamp_end - (timestamp_end % (3600*n))
 
-	main_dict = parseDictHours(hours, end)
+	hi_end = timestamp_end - (timestamp_end % (3600))
+
+	main_dict = parseDictHours(hours, hi_end)
 
 	result = []
 	cnt = 0
@@ -161,11 +188,31 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 			result.append(obj)
 
-	return result[n::n]
+	new_result = []
+
+	for i in result[n:]:
+
+		if cnt % n == 0:
+
+			obj = {}
+			obj['timestamp'] = i['timestamp']
+			obj['index'] = i['index']
+
+			new_result.append(obj)
+
+		else:
+
+			if i['timestamp'] <= int(last_timestamp):
+
+				new_result[-1]['index'] = i['index']
+
+		cnt += 1
+
+	return new_result
 
 async def parseNMinutes(timestamp_start, timestamp_end, n):
 
-	minutes = getLogRebases(timestamp_end)['data']['logRebaseDailies']
+	minutes = getLogRebases(timestamp_end+3600*8*n)['data']['logRebaseDailies']
 
 	start = timestamp_start - (timestamp_start % (60*n))
 	end = timestamp_end - (timestamp_end % (60*n))
@@ -177,6 +224,9 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 		last_timestamp = minutes[-1]['timestamp']
 		first_timestamp = minutes[0]['timestamp']
+
+		print(f'lst {last_timestamp}')
+		print(f'frst {first_timestamp}')
 
 		main_dict = parseDictMinutes(minutes, end)
 
@@ -208,8 +258,27 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 			result.append(obj)
 
+	new_result = []
 
-	return result[n::n]
+	for i in result[n:]:
+
+		if cnt % n == 0:
+
+			obj = {}
+			obj['timestamp'] = i['timestamp']
+			obj['index'] = i['index']
+
+			new_result.append(obj)
+
+		else:
+
+			if i['timestamp'] <= int(last_timestamp):
+
+				new_result[-1]['index'] = i['index']
+
+		cnt += 1
+
+	return new_result
 
 
 
