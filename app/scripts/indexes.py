@@ -27,10 +27,8 @@ def getLogRebases(end):
 
 async def parseNDays(timestamp_start, timestamp_end, n):
 
-	timestamp_start -= 86400
-
-	start = timestamp_start - (timestamp_start % (3600*n))
-	end = timestamp_end - (timestamp_end % (3600*n))
+	start = timestamp_start - (timestamp_start % (86400*n))
+	end = timestamp_end - (timestamp_end % (86400*n))
 
 	days = getLogRebases(timestamp_end)['data']['logRebaseDailies']
 	result = []
@@ -40,7 +38,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 		last_timestamp = days[-1]['timestamp']
 		first_timestamp = days[0]['timestamp']
 
-		for i in range(start+86400*2, int(first_timestamp), 86400):
+		for i in range(start, int(first_timestamp), 86400):
 			obj = {}
 			obj['timestamp'] = i
 			obj['index'] = 0
@@ -50,20 +48,20 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 		for i in days:
 			if int(i['timestamp']) >= timestamp_start:
 				obj = {}
-				obj['timestamp'] = int(i['timestamp']) + 86400
+				obj['timestamp'] = int(i['timestamp'])
 				obj['index'] = round(int(i['index']) / 1000000000, 3)
 
 				result.append(obj)
 
 		for i in range(int(last_timestamp)+86400, end, 86400):
 			obj = {}
-			obj['timestamp'] = i + 86400
+			obj['timestamp'] = i
 			obj['index'] = 0
 
 			result.append(obj)
 	else:
 
-		for i in range(start+86400*2, end, 86400):
+		for i in range(start+86400, end, 86400):
 
 			obj = {}
 			obj['timestamp'] = i
