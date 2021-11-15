@@ -40,7 +40,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 		last_timestamp = days[-1]['timestamp']
 		first_timestamp = days[0]['timestamp']
 
-		for i in range(start+86400, int(first_timestamp), 86400):
+		for i in range(start+86400*2, int(first_timestamp), 86400):
 			obj = {}
 			obj['timestamp'] = i
 			obj['index'] = 0
@@ -63,7 +63,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 			result.append(obj)
 	else:
 
-		for i in range(start+86400, end, 86400):
+		for i in range(start+86400*2, end, 86400):
 
 			obj = {}
 			obj['timestamp'] = i
@@ -155,7 +155,7 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 			result.append(tempObj)
 	else:
 
-		for i in range(start+3600, end, 3600):
+		for i in range(start, end, 3600):
 
 			obj = {}
 			obj['timestamp'] = i
@@ -202,7 +202,7 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	else:
 
-		for i in range(start+60, end, 60):
+		for i in range(start, end, 60):
 
 			obj = {}
 			obj['timestamp'] = i
