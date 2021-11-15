@@ -40,7 +40,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 		last_timestamp = days[-1]['timestamp']
 		first_timestamp = days[0]['timestamp']
 
-		for i in range(start, int(first_timestamp), 86400):
+		for i in range(start+86400, int(first_timestamp), 86400):
 			obj = {}
 			obj['timestamp'] = i
 			obj['index'] = 0
