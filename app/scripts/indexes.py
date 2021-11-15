@@ -225,9 +225,6 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 		last_timestamp = minutes[-1]['timestamp']
 		first_timestamp = minutes[0]['timestamp']
 
-		print(f'lst {last_timestamp}')
-		print(f'frst {first_timestamp}')
-
 		main_dict = parseDictMinutes(minutes, end)
 
 		nearest = searchNearest(start, main_dict)
