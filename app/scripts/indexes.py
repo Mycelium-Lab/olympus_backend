@@ -44,10 +44,10 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 	days = getLogRebases(timestamp_end+(86400*n))['data']['logRebaseDailies']
 	result = []
 
-	last_timestamp = days[-1]['timestamp']
-	first_timestamp = days[0]['timestamp']
-
 	if days:
+
+		last_timestamp = days[-1]['timestamp']
+		first_timestamp = days[0]['timestamp']
 
 		for i in range(start, int(first_timestamp), 86400):
 			obj = {}
@@ -83,23 +83,29 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 	new_result = []
 	cnt = 0
 
-	for i in result:
+	if days:
 
-		if cnt % n == 0:
+		for i in result[n:]:
 
-			obj = {}
-			obj['timestamp'] = i['timestamp']
-			obj['index'] = i['index']
+			if cnt % n == 0:
 
-			new_result.append(obj)
+				obj = {}
+				obj['timestamp'] = i['timestamp']
+				obj['index'] = i['index']
 
-		else:
+				new_result.append(obj)
 
-			if i['timestamp'] <= int(last_timestamp):
+			else:
 
-				new_result[-1]['index'] = i['index']
+				if i['timestamp'] <= int(last_timestamp):
 
-		cnt += 1
+					new_result[-1]['index'] = i['index']
+
+			cnt += 1
+
+	else:
+
+		new_result = result[n::n]
 
 	return new_result
 
@@ -189,10 +195,10 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 	result = []
 	cnt = 0
 
-	last_timestamp = int(hours[-1]['timestamp']) + 86399
-	first_timestamp = hours[0]['timestamp']
-
 	if hours:
+
+		last_timestamp = int(hours[-1]['timestamp']) + 86399
+		first_timestamp = hours[0]['timestamp']
 
 		print(last_timestamp ,first_timestamp)
 
@@ -240,23 +246,29 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 	#print(result[n::])
 
-	for i in result[n:]:
+	if hours:
 
-		if cnt % n == 0:
+		for i in result[n:]:
 
-			obj = {}
-			obj['timestamp'] = i['timestamp']
-			obj['index'] = i['index']
+			if cnt % n == 0:
 
-			new_result.append(obj)
+				obj = {}
+				obj['timestamp'] = i['timestamp']
+				obj['index'] = i['index']
 
-		else:
+				new_result.append(obj)
 
-			if i['timestamp'] <= int(last_timestamp):
+			else:
 
-				new_result[-1]['index'] = i['index']
+				if i['timestamp'] <= int(last_timestamp):
 
-		cnt += 1
+					new_result[-1]['index'] = i['index']
+
+			cnt += 1
+
+	else:
+
+		new_result = result[n::n]
 
 	return new_result
 
@@ -270,10 +282,10 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 	result = []
 	cnt = 0
 
-	last_timestamp = int(minutes[-1]['timestamp']) + 86399
-	first_timestamp = minutes[0]['timestamp']
-
 	if minutes:
+
+		last_timestamp = int(minutes[-1]['timestamp']) + 86399
+		first_timestamp = minutes[0]['timestamp']
 
 		main_dict = parseDictMinutes(minutes, end)
 
@@ -318,23 +330,30 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	new_result = []
 
-	for i in result[n:]:
+	if minutes:
 
-		if cnt % n == 0:
+		for i in result[n:]:
 
-			obj = {}
-			obj['timestamp'] = i['timestamp']
-			obj['index'] = i['index']
+			if cnt % n == 0:
 
-			new_result.append(obj)
+				obj = {}
+				obj['timestamp'] = i['timestamp']
+				obj['index'] = i['index']
 
-		else:
+				new_result.append(obj)
 
-			if i['timestamp'] <= int(last_timestamp):
+			else:
 
-				new_result[-1]['index'] = i['index']
+				if i['timestamp'] <= int(last_timestamp):
 
-		cnt += 1
+					new_result[-1]['index'] = i['index']
+
+			cnt += 1
+
+	else:
+
+		new_result = result[n::n]
+
 
 	return new_result
 
