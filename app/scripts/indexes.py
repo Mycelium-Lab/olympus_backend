@@ -44,10 +44,10 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 	days = getLogRebases(timestamp_end+(86400*n))['data']['logRebaseDailies']
 	result = []
 
-	if days:
+	last_timestamp = days[-1]['timestamp']
+	first_timestamp = days[0]['timestamp']
 
-		last_timestamp = days[-1]['timestamp']
-		first_timestamp = days[0]['timestamp']
+	if days:
 
 		for i in range(start, int(first_timestamp), 86400):
 			obj = {}
@@ -189,10 +189,10 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 	result = []
 	cnt = 0
 
-	if hours:
+	last_timestamp = int(hours[-1]['timestamp']) + 86399
+	first_timestamp = hours[0]['timestamp']
 
-		last_timestamp = int(hours[-1]['timestamp']) + 86399
-		first_timestamp = hours[0]['timestamp']
+	if hours:
 
 		print(last_timestamp ,first_timestamp)
 
@@ -270,10 +270,10 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 	result = []
 	cnt = 0
 
-	if minutes:
+	last_timestamp = int(minutes[-1]['timestamp']) + 86399
+	first_timestamp = minutes[0]['timestamp']
 
-		last_timestamp = int(minutes[-1]['timestamp']) + 86399
-		first_timestamp = minutes[0]['timestamp']
+	if minutes:
 
 		main_dict = parseDictMinutes(minutes, end)
 
