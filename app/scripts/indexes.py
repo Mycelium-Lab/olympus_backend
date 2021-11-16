@@ -85,7 +85,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 
 	if days:
 
-		for i in result[n:]:
+		for i in result:
 
 			if cnt % n == 0:
 
@@ -105,7 +105,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 
 	else:
 
-		new_result = result[n::n]
+		new_result = result[::n]
 
 	return new_result
 
@@ -186,7 +186,7 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 	hours = getLogRebases(timestamp_end+86400)['data']['logRebaseDailies']
 
 	start = timestamp_start - (timestamp_start % (3600))
-	end = timestamp_end - (timestamp_end % (3600))
+	end = timestamp_end - (timestamp_end % (3600)) + 3600
 
 	hi_end = timestamp_end - (timestamp_end % 3600)
 
@@ -197,7 +197,7 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 	if hours:
 
-		last_timestamp = int(hours[-1]['timestamp']) + 86399
+		last_timestamp = int(hours[-1]['hours'][-1]['timestamp'])
 		first_timestamp = hours[0]['timestamp']
 
 		print(last_timestamp ,first_timestamp)
@@ -248,7 +248,7 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 	if hours:
 
-		for i in result[n:]:
+		for i in result:
 
 			if cnt % n == 0:
 
@@ -268,7 +268,7 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 	else:
 
-		new_result = result[n::n]
+		new_result = result[::n]
 
 	return new_result
 
@@ -276,15 +276,15 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	minutes = getLogRebases(timestamp_end+3600*8*n)['data']['logRebaseDailies']
 
-	start = timestamp_start - (timestamp_start % (60*n))
-	end = timestamp_end - (timestamp_end % (60*n))
+	start = timestamp_start - (timestamp_start % (60))
+	end = timestamp_end - (timestamp_end % (60)) + 60
 
 	result = []
 	cnt = 0
 
 	if minutes:
 
-		last_timestamp = int(minutes[-1]['timestamp']) + 86399
+		last_timestamp = int(minutes[-1]['hours'][-1]['minutes'][-1]['timestamp'])
 		first_timestamp = minutes[0]['timestamp']
 
 		main_dict = parseDictMinutes(minutes, end)
@@ -330,9 +330,11 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	new_result = []
 
+	cnt = 0
+
 	if minutes:
 
-		for i in result[n:]:
+		for i in result:
 
 			if cnt % n == 0:
 
@@ -352,7 +354,7 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	else:
 
-		new_result = result[n::n]
+		new_result = result[::n]
 
 
 	return new_result
