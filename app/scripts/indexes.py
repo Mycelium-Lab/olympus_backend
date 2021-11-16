@@ -9,10 +9,10 @@ def getLogRebases(end):
 		logRebaseDailies(orderBy: timestamp, first:1000, where:{{timestamp_lte:"{end}"}}) {{
 			timestamp
 			index
-			hours(orderBy: timestamp, first:24, where:{{timestamp_lte:"{end}"}}) {{
+			hours(orderBy: timestamp, first:24) {{
 				timestamp
 				index
-				minutes(orderBy: timestamp, first:60, where:{{timestamp_lte:"{end}"}}) {{
+				minutes(orderBy: timestamp, first:60) {{
 					timestamp
 					index
 				}}
@@ -199,8 +199,6 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 		last_timestamp = int(hours[-1]['hours'][-1]['timestamp'])
 		first_timestamp = hours[0]['timestamp']
-
-		print(last_timestamp ,first_timestamp)
 
 		nearest = searchNearestHours(start, main_dict)
 
