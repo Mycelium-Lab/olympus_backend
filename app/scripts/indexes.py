@@ -31,11 +31,15 @@ def getLogRebases(end):
 async def parseNDays(timestamp_start, timestamp_end, n):
 
 
-	if (timestamp_start % (86400*n) == 0:
-		start = timestamp_start - (timestamp_start % (86400*n))
+	if (timestamp_start % (86400)) == 0:
+
+		start = timestamp_start - (timestamp_start % (86400))
+
 	else:
-		start = timestamp_start - (timestamp_start % (86400*n)) + 86400
-	end = timestamp_end - (timestamp_end % (86400*n))
+
+		start = timestamp_start - (timestamp_start % (86400)) + 86400
+
+	end = timestamp_end - (timestamp_end % (86400))
 
 	days = getLogRebases(timestamp_end+(86400*n))['data']['logRebaseDailies']
 	result = []
@@ -105,10 +109,15 @@ def parseDictHours(array, end):
 	result = {}
 
 	for i in array:
+
 		for k in i['hours']:
+
 			if int(k['timestamp']) <= end:
+
 				result[int(k['timestamp'])] = k['index']
+
 			else:
+
 				return result
 
 	return result
@@ -118,42 +127,62 @@ def parseDictMinutes(array, end):
 	result = {}
 
 	for i in array:
+
 		for j in i['hours']:
+
 			for k in j['minutes']:
+
 				if int(k['timestamp']) <= end:
+
 					result[int(k['timestamp'])] = k['index']
+
 				else:
+
 					return result
 
 	return result
 
 
 def searchNearestHours(start, dicts):
+
 	if start <= 1623700800:
+
 		return 0
+
 	else:
+
 		for i in range(start, 1623700800, -3600):
+
 			if i in dicts:
+
 				return dicts[i]
+
 		return dicts[1623700800]
 
 def searchNearest(start, dicts):
+
 	if start <= 1623702000:
+
 		return 0
+
 	else:
+
 		for i in range(start, 1623702000, -60):
+
 			if i in dicts:
+
 				return dicts[i]
+
 		return dicts[1623702000]
 
 async def parseNHours(timestamp_start, timestamp_end, n):
 
 	hours = getLogRebases(timestamp_end+86400)['data']['logRebaseDailies']
 
-	start = timestamp_start - (timestamp_start % (3600*n))
-	end = timestamp_end - (timestamp_end % (3600*n))
+	start = timestamp_start - (timestamp_start % (3600))
+	end = timestamp_end - (timestamp_end % (3600))
 
-	hi_end = timestamp_end - (timestamp_end % (3600))
+	hi_end = timestamp_end - (timestamp_end % 3600)
 
 	main_dict = parseDictHours(hours, hi_end)
 
@@ -162,23 +191,36 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 	if hours:
 
-		last_timestamp = hours[-1]['timestamp']
+		last_timestamp = int(hours[-1]['timestamp']) + 86399
 		first_timestamp = hours[0]['timestamp']
+
+		print(last_timestamp ,first_timestamp)
 
 		nearest = searchNearestHours(start, main_dict)
 
 		for i in range(start, end, 3600):
+
 			tempObj = {}
 			tempObj['timestamp'] = i
+
 			if (i > int(last_timestamp)) or (i < int(first_timestamp)):
+
 				tempObj['index'] = 0
+
 			else:
+
 				if i in main_dict:
+
 					tempObj['index'] = round(int(main_dict[i]) / 1000000000, 3)
+
 				else:
+
 					if cnt == 0:
+
 						tempObj['index'] = round(int(nearest) / 1000000000, 3)
+
 					else:
+
 						tempObj['index'] = result[cnt-1]['index']
 			cnt += 1
 			result.append(tempObj)
@@ -193,6 +235,10 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 			result.append(obj)
 
 	new_result = []
+
+	cnt = 0
+
+	#print(result[n::])
 
 	for i in result[n:]:
 
@@ -226,7 +272,7 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	if minutes:
 
-		last_timestamp = minutes[-1]['timestamp']
+		last_timestamp = int(minutes[-1]['timestamp']) + 86399
 		first_timestamp = minutes[0]['timestamp']
 
 		main_dict = parseDictMinutes(minutes, end)
@@ -234,17 +280,28 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 		nearest = searchNearest(start, main_dict)
 
 		for i in range(start, end, 60):
+
 			tempObj = {}
 			tempObj['timestamp'] = i
+
 			if (i > int(last_timestamp)) or (i < int(first_timestamp)):
+
 				tempObj['index'] = 0
+
 			else:
+
 				if i in main_dict:
+
 					tempObj['index'] = round(int(main_dict[i]) / 1000000000, 3)
+
 				else:
+
 					if cnt == 0:
+
 						tempObj['index'] = round(int(nearest) / 1000000000, 3)
+
 					else:
+
 						tempObj['index'] = result[cnt-1]['index']
 			cnt += 1
 			result.append(tempObj)
