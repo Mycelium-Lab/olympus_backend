@@ -39,6 +39,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 
 		start = timestamp_start - (timestamp_start % (86400)) + 86400
 
+	print(start)
 	end = timestamp_end - (timestamp_end % (86400))
 
 	days = getLogRebases(timestamp_end+(86400*n))['data']['logRebaseDailies']
@@ -72,7 +73,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 			result.append(obj)
 	else:
 
-		for i in range(start+86400, end, 86400):
+		for i in range(start, end, 86400):
 
 			obj = {}
 			obj['timestamp'] = i
