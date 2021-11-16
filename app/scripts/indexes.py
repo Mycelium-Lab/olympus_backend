@@ -30,10 +30,10 @@ def getLogRebases(end):
 #функция парсинга дней
 async def parseNDays(timestamp_start, timestamp_end, n):
 
-	start = timestamp_start - (timestamp_start % (86400*n))
+	start = timestamp_start - (timestamp_start % (86400*n)) + 86400
 	end = timestamp_end - (timestamp_end % (86400*n))
 
-	days = getLogRebases(timestamp_end)['data']['logRebaseDailies']
+	days = getLogRebases(timestamp_end+(86400*n))['data']['logRebaseDailies']
 	result = []
 
 	if days:
