@@ -186,8 +186,15 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 
 	hours = getLogRebases(timestamp_end+86400)['data']['logRebaseDailies']
 
-	start = timestamp_start - (timestamp_start % (3600))
-	end = timestamp_end - (timestamp_end % (3600)) + 3600
+	if (timestamp_start % (3600)) == 0:
+
+		start = timestamp_start - (timestamp_start % (3600))
+
+	else:
+
+		start = timestamp_start - (timestamp_start % (3600)) + 3600
+
+	end = timestamp_end - (timestamp_end % (3600))
 
 	hi_end = timestamp_end - (timestamp_end % 3600)
 
@@ -275,8 +282,15 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 
 	minutes = getLogRebases(timestamp_end+3600*8*n)['data']['logRebaseDailies']
 
-	start = timestamp_start - (timestamp_start % (60))
-	end = timestamp_end - (timestamp_end % (60)) + 60
+	if (timestamp_start % (60)) == 0:
+
+		start = timestamp_start - (timestamp_start % (60))
+
+	else:
+
+		start = timestamp_start - (timestamp_start % (60)) + 60
+		
+	end = timestamp_end - (timestamp_end % (60))
 
 	result = []
 	cnt = 0
