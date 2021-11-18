@@ -1,8 +1,4 @@
-from gql import gql, Client
-from gql.transport.aiohttp import AIOHTTPTransport
-
-transport = AIOHTTPTransport(url="https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets")
-client = Client(transport=transport, fetch_schema_from_transport=True)
+import requests
 
 async def queryTotal(timestamp_start, period):
     timestamp_end = timestamp_start + 86400*period
@@ -16,11 +12,10 @@ async def queryTotal(timestamp_start, period):
     }}
     """
 
-    query = gql(queryString)
+    request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': queryString})
+    result = request.json()
 
-    result = await client.execute_async(query)
-
-    return result
+    return result['data']
 
 async def totalWallets(timestamp_start, period):
     
@@ -45,9 +40,3 @@ async def totalBalances(timestamp_start, period):
         array_balance.append(tempBalance)
 
     return array_balance
-
-
-
-
-
-

@@ -68,7 +68,7 @@ async def parseNDays(timestamp_start, timestamp_end, n):
 		for i in range(int(last_timestamp)+86400, end, 86400):
 			obj = {}
 			obj['timestamp'] = i
-			obj['index'] = 0
+			obj['index'] = result[-1]['index']
 
 			result.append(obj)
 	else:
@@ -215,7 +215,7 @@ async def parseNHours(timestamp_start, timestamp_end, n):
 			tempObj = {}
 			tempObj['timestamp'] = i
 
-			if (i > int(last_timestamp)) or (i < int(first_timestamp)):
+			if (i < int(first_timestamp)):
 
 				tempObj['index'] = 0
 
@@ -289,7 +289,7 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 	else:
 
 		start = timestamp_start - (timestamp_start % (60)) + 60
-		
+
 	end = timestamp_end - (timestamp_end % (60))
 
 	result = []
@@ -309,7 +309,7 @@ async def parseNMinutes(timestamp_start, timestamp_end, n):
 			tempObj = {}
 			tempObj['timestamp'] = i
 
-			if (i > int(last_timestamp)) or (i < int(first_timestamp)):
+			if (i < int(first_timestamp)):
 
 				tempObj['index'] = 0
 
