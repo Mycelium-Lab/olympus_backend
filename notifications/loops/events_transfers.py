@@ -63,7 +63,7 @@ def handle_event(event):
         elif event['args']['managing']==9:
             role = "SOHM"
             print("SOHM "+event['args']['queued'])
-        requests.get(f"http://localhost:8000/change_role?role={role}&address={event['args']['queued'].hex()}", timeout=10)
+        requests.get(f"http://localhost:8000/change_role?role={role}&address={event['args']['queued']}", timeout=10)
     elif event['event']=="ChangeActivated":
         role = ""
         if event['args']['managing']==0:
@@ -96,11 +96,11 @@ def handle_event(event):
         elif event['args']['managing']==9:
             role = "SOHM"
             print("SOHM "+event['args']['activated']+" "+str(event['args']['result']))
-        requests.get(f"http://localhost:8000/activate_role?role={role}&address={event['args']['activated'].hex()}&activated={str(event['args']['result'])}", timeout=10)
+        requests.get(f"http://localhost:8000/activate_role?role={role}&address={event['args']['activated']}&activated={str(event['args']['result'])}", timeout=10)
     elif event['event']=="ReservesManaged":
         print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
         token = getTokenName(event['args']['token'])
-        requests.get(f"http://localhost:8000/reserves_managed?amount={event['args']['amount']*(10**-18)}&token={token}", timeout=10)
+        requests.get(f"http://localhost:8000/reserves_managed?amount={int(event['args']['amount'])*(10**-18)}&token={token}", timeout=10)
     else:
         print(event)
 
