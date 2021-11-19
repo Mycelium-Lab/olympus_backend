@@ -102,7 +102,7 @@ async def activate_role(role,address,activated):
     db = eval(file_db.read())
     file_db.close()
     act = "Role has been activated"
-    if activated != "true":
+    if activated != "True":
         act = "Role hasn`t been activated:" 
     for i in db:
         await bot.send_message(i, f'🟨 {act} : {role} for <a href="https://ethplorer.io/ru/address/{address}">{address}</a>', parse_mode="HTML")
