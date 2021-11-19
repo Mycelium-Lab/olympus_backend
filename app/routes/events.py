@@ -27,6 +27,10 @@ async def handle_transfer(amount: float = 100.0, to: str = "", tx: str = "", fro
 @router.get("/change_role")
 async def handle_change(role: str = "", address: str = ""):
 
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+
     if int(fake_db['states']['change_role']):
         await change_role(role,address)
     return "ok"
@@ -44,6 +48,11 @@ async def handle_reserves(token: str = "", amount: float = ""):
 
 @router.get("/activate_role")
 async def handle_activate(role: str = "", address: str = "", activated: str = ""):
+
+    f = open("notifications.txt")
+    fake_db = eval(f.read())
+    f.close()
+    
     if int(fake_db['states']['change_role']):
         await activate_role(role,address,activated)
     return "ok"

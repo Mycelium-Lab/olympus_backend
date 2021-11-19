@@ -22,39 +22,6 @@ from web3 import Web3
 from threading import Thread
 import time
 
-'''
-class BackgroundRunner:
-
-    async def main(self):
-        w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/f7b4f0c651b84c2e93b45e1a398f4f6b'))
-        abi = open("ohm.json").read()
-        abi_tres = open("treasury.json").read()
-        address = '0x383518188c0c6d7730d91b2c03a03c837814a899'
-        contract_instance = w3.eth.contract(address=Web3.toChecksumAddress(address), abi=abi)
-        transfer_filter = contract_instance.events.Transfer.createFilter(fromBlock=12525281)
-        address_tres = '0x31F8Cc382c9898b273eff4e0b7626a6987C846E8'
-        contract_tres = w3.eth.contract(address=address_tres, abi=abi_tres)
-        change_queued_filter = contract_tres.events.ChangeQueued.createFilter(fromBlock=12525281) #12525281 for get_all_entries
-        reserves_managed_filter = contract_tres.events.ReservesManaged.createFilter(fromBlock=12525281) #12525281
-        #rewards_minted_filter = contract_tres.events.RewardsMinted.createFilter(fromBlock=12525281) #12525281
-        change_activated_filter = contract_tres.events.ChangeActivated.createFilter(fromBlock=12525281) #12525281
-        #deposit_filter = contract_tres.events.ReservesUpdated.createFilter(fromBlock=12525281) #12525281
-
-        worker = [Thread(target=log_loop, args=(transfer_filter, 1), daemon=True),
-        Thread(target=log_loop, args=(change_activated_filter, 1), daemon=True),
-        Thread(target=log_loop, args=(change_queued_filter, 1), daemon=True),
-        Thread(target=log_loop, args=(reserves_managed_filter, 1), daemon=True)]
-
-        for item in worker:
-            item.start()
-       
-        while True:
-            time.sleep(20)
-
-
-runner = BackgroundRunner()
-
-'''
 
 app = FastAPI()
 
