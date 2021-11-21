@@ -37,7 +37,7 @@ app.add_middleware(
 
 
 WEBHOOK_PATH = f"/bot/{TOKEN}"
-WEBHOOK_URL = "https://977c-62-84-119-83.ngrok.io" + WEBHOOK_PATH
+WEBHOOK_URL = "https://535b-62-84-117-55.ngrok.io" + WEBHOOK_PATH
 
 
 
