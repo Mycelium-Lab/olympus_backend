@@ -18,91 +18,98 @@ def getTokenName(token):
 
 
 def handle_event(event):
-    if event['event'] == "Transfer":
-        i = event['args']
-        tx = event['transactionHash'].hex()
-        amount = float(float(i['value'])/1000000000)
-        print(amount)
-        if (i['from'] == "0x245cc372C84B3645Bf0Ffe6538620B04a217988B"):
-            requests.get(f"http://localhost:8000/transfer_dao?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}", timeout=10)
-        elif (i['from'] == "0xfd31c7d00ca47653c6ce64af53c1571f9c36566a") or (i['from'] == "0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a"):
-            requests.get(f"http://localhost:8000/unstake?amount={amount}&to={i['to']}&id={tx}", timeout=10)
-        elif i['from'] == "0x383518188C0C6d7730D91b2c03a03C837814a899":
-            requests.get(f"http://localhost:8000/mint?amount={amount}&to={i['to']}&tx={tx}", timeout=10)
+    try:
+        if event['event'] == "Transfer":
+            i = event['args']
+            tx = event['transactionHash'].hex()
+            amount = float(float(i['value'])/1000000000)
+            print(amount)
+            if (i['from'] == "0x245cc372C84B3645Bf0Ffe6538620B04a217988B"):
+                requests.get(f"http://localhost:8000/transfer_dao?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}", timeout=10)
+            elif (i['from'] == "0xfd31c7d00ca47653c6ce64af53c1571f9c36566a") or (i['from'] == "0xFd31c7d00Ca47653c6Ce64Af53c1571f9C36566a"):
+                requests.get(f"http://localhost:8000/unstake?amount={amount}&to={i['to']}&id={tx}", timeout=10)
+            elif i['from'] == "0x383518188C0C6d7730D91b2c03a03C837814a899":
+                requests.get(f"http://localhost:8000/mint?amount={amount}&to={i['to']}&tx={tx}", timeout=10)
+            else:
+                requests.get(f"http://localhost:8000/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}", timeout=10)
+        elif event['event']=="ChangeQueued":
+            role = ""
+            if event['args']['managing']==0:
+                role = "RESERVEDEPOSITOR"
+                print("RESERVEDEPOSITOR "+event['args']['queued'])
+            elif event['args']['managing']==1:
+                role = "RESERVESPENDER"
+                print("RESERVESPENDER "+event['args']['queued'])
+            elif event['args']['managing']==2:
+                role = "RESERVETOKEN"
+                print("RESERVETOKEN "+event['args']['queued'])
+            elif event['args']['managing']==3:
+                role = "RESERVEMANAGER"
+                print("RESERVEMANAGER "+event['args']['queued'])
+            elif event['args']['managing']==4:
+                role = "LIQUIDITYDEPOSITOR"
+                print("LIQUIDITYDEPOSITOR "+event['args']['queued'])
+            elif event['args']['managing']==5:
+                role = "LIQUIDITYTOKEN"
+                print("LIQUIDITYTOKEN "+event['args']['queued'])
+            elif event['args']['managing']==6:
+                role = "LIQUIDITYMANAGER"
+                print("LIQUIDITYMANAGER "+event['args']['queued'])
+            elif event['args']['managing']==7:
+                role = "DEBTOR"
+                print("DEBTOR "+event['args']['queued'])
+            elif event['args']['managing']==8:
+                role = "REWARDMANAGER"
+                print("REWARDMANAGER "+event['args']['queued'])
+            elif event['args']['managing']==9:
+                role = "SOHM"
+                print("SOHM "+event['args']['queued'])
+            requests.get(f"http://localhost:8000/change_role?role={role}&address={event['args']['queued']}", timeout=10)
+        elif event['event']=="ChangeActivated":
+            role = ""
+            if event['args']['managing']==0:
+                role = "RESERVEDEPOSITOR"
+                print("RESERVEDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==1:
+                role = "RESERVESPENDER"
+                print("RESERVESPENDER "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==2:
+                role = "RESERVETOKEN"
+                print("RESERVETOKEN "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==3:
+                role = "RESERVEMANAGER"
+                print("RESERVEMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==4:
+                role = "LIQUIDITYDEPOSITOR"
+                print("LIQUIDITYDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==5:
+                role = "LIQUIDITYTOKEN"
+                print("LIQUIDITYTOKEN "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==6:
+                role = "LIQUIDITYMANAGER"
+                print("LIQUIDITYMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==7:
+                role = "DEBTOR"
+                print("DEBTOR "+event['args']['activated'])
+            elif event['args']['managing']==8:
+                role = "REWARDMANAGER"
+                print("REWARDMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
+            elif event['args']['managing']==9:
+                role = "SOHM"
+                print("SOHM "+event['args']['activated']+" "+str(event['args']['result']))
+            requests.get(f"http://localhost:8000/activate_role?role={role}&address={event['args']['activated']}&activated={str(event['args']['result'])}", timeout=10)
+        elif event['event']=="ReservesManaged":
+            print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
+            token = getTokenName(event['args']['token'])
+            requests.get(f"http://localhost:8000/reserves_managed?amount={int(event['args']['amount'])*(10**-18)}&token={token}", timeout=10)
         else:
-            requests.get(f"http://localhost:8000/transfer?amount={amount}&to={i['to']}&froms={i['from']}&tx={tx}", timeout=10)
-    elif event['event']=="ChangeQueued":
-        role = ""
-        if event['args']['managing']==0:
-            role = "RESERVEDEPOSITOR"
-            print("RESERVEDEPOSITOR "+event['args']['queued'])
-        elif event['args']['managing']==1:
-            role = "RESERVESPENDER"
-            print("RESERVESPENDER "+event['args']['queued'])
-        elif event['args']['managing']==2:
-            role = "RESERVETOKEN"
-            print("RESERVETOKEN "+event['args']['queued'])
-        elif event['args']['managing']==3:
-            role = "RESERVEMANAGER"
-            print("RESERVEMANAGER "+event['args']['queued'])
-        elif event['args']['managing']==4:
-            role = "LIQUIDITYDEPOSITOR"
-            print("LIQUIDITYDEPOSITOR "+event['args']['queued'])
-        elif event['args']['managing']==5:
-            role = "LIQUIDITYTOKEN"
-            print("LIQUIDITYTOKEN "+event['args']['queued'])
-        elif event['args']['managing']==6:
-            role = "LIQUIDITYMANAGER"
-            print("LIQUIDITYMANAGER "+event['args']['queued'])
-        elif event['args']['managing']==7:
-            role = "DEBTOR"
-            print("DEBTOR "+event['args']['queued'])
-        elif event['args']['managing']==8:
-            role = "REWARDMANAGER"
-            print("REWARDMANAGER "+event['args']['queued'])
-        elif event['args']['managing']==9:
-            role = "SOHM"
-            print("SOHM "+event['args']['queued'])
-        requests.get(f"http://localhost:8000/change_role?role={role}&address={event['args']['queued']}", timeout=10)
-    elif event['event']=="ChangeActivated":
-        role = ""
-        if event['args']['managing']==0:
-            role = "RESERVEDEPOSITOR"
-            print("RESERVEDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==1:
-            role = "RESERVESPENDER"
-            print("RESERVESPENDER "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==2:
-            role = "RESERVETOKEN"
-            print("RESERVETOKEN "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==3:
-            role = "RESERVEMANAGER"
-            print("RESERVEMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==4:
-            role = "LIQUIDITYDEPOSITOR"
-            print("LIQUIDITYDEPOSITOR "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==5:
-            role = "LIQUIDITYTOKEN"
-            print("LIQUIDITYTOKEN "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==6:
-            role = "LIQUIDITYMANAGER"
-            print("LIQUIDITYMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==7:
-            role = "DEBTOR"
-            print("DEBTOR "+event['args']['activated'])
-        elif event['args']['managing']==8:
-            role = "REWARDMANAGER"
-            print("REWARDMANAGER "+event['args']['activated']+" "+str(event['args']['result']))
-        elif event['args']['managing']==9:
-            role = "SOHM"
-            print("SOHM "+event['args']['activated']+" "+str(event['args']['result']))
-        requests.get(f"http://localhost:8000/activate_role?role={role}&address={event['args']['activated']}&activated={str(event['args']['result'])}", timeout=10)
-    elif event['event']=="ReservesManaged":
-        print("ReservesManaged "+str(event['args']['amount']*(10**-18))+" "+(event['args']['token']))
-        token = getTokenName(event['args']['token'])
-        requests.get(f"http://localhost:8000/reserves_managed?amount={int(event['args']['amount'])*(10**-18)}&token={token}", timeout=10)
-    else:
-        print(event)
+            print(event)
+    except requests.exceptions.ConnectionError as e:
+        raise
+    except ValueError as e:
+        raise
+    except:
+        raise
 
 
 
@@ -113,9 +120,11 @@ def log_loop(event_filter, poll_interval):
                 handle_event(event)
             time.sleep(poll_interval)
     except requests.exceptions.ConnectionError as e:
-        print(f"Error {e}")
+        raise
     except ValueError as e:
-        print(f"Error {e}")
+        raise
+    except:
+        raise
 
 def main():
     w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/f7b4f0c651b84c2e93b45e1a398f4f6b'))
