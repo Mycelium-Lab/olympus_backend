@@ -6,7 +6,7 @@ from datetime import datetime
 def getLogRebases(end, types):
 
 	queryString = f"""query getGeneral {{
-		totalSupplyDailies(orderBy: timestamp, first:1000, where:{{timestamp_lte:"{end}"}}) {{
+		totalSupplyDailies(orderBy: timestamp, first:1000, where:{{timestamp_lt:"{end}"}}) {{
 			timestamp
 			{types}
 			hours(orderBy: timestamp, first:24) {{
@@ -44,7 +44,7 @@ async def parseGANDays(timestamp_start, timestamp_end, n, types):
 	end = timestamp_end - (timestamp_end % (86400))
 	print(types)
 	print(getLogRebases(timestamp_end+(86400*n), types))
-	days = getLogRebases(timestamp_end+(86400*n), types)['data']['totalSupplyDailies']
+	days = getLogRebases(timestamp_end, types)['data']['totalSupplyDailies']
 	result = []
 
 	if days:
