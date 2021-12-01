@@ -23,7 +23,7 @@ def getLogRebases(end, types):
 
 	print(queryString)
 
-	request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-wallets', json={'query': queryString})
+	request = requests.post('https://api.thegraph.com/subgraphs/name/deltax2016/olympus-total', json={'query': queryString})
 	result = request.json()
 
 	return result
